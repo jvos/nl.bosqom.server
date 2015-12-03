@@ -5,7 +5,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 class apache2 {
   private $path = '/etc/apache2';
   
@@ -30,7 +29,7 @@ class apache2 {
         $this->sites[$site_type][$file_conf] = [];
         
         if(!$handle = fopen($this->path . '/' . $site_type . '/' . $file_conf, 'r')){
-          echo('Class apache2, function getVirtualHost, can not open ' . $this->path . '/' . $site_type . '/' . $file_conf) . PHP_EOL;
+          display_message(sprintf('Class apache2, function getVirtualHost, can not open %s !', $this->path . '/' . $site_type . '/' . $file_conf), 'error');
           
         }else {
           while(!feof($handle)){
@@ -39,28 +38,30 @@ class apache2 {
             
             $tokens = explode(' ',$line);
             if(!empty($tokens)){
-              $tokens[1] = str_replace('"', "", $tokens[1]);
-              $tokens[1] = str_replace("'", "", $tokens[1]);
-              $tokens[1] = trim($tokens[1]);
-              
-              if(strtolower($tokens[0]) == 'documentroot'){
-                $this->sites[$site_type][$file_conf]['DocumentRoot'] = $tokens[1];
-              }
-              if(strtolower($tokens[0]) == 'servername'){
-                $this->sites[$site_type][$file_conf]['ServerName'] = $tokens[1];
-              }
-              if(strtolower($tokens[0]) == 'serveralias'){
-                $this->sites[$site_type][$file_conf]['ServerAlias'] = $tokens[1];
-              }
-              
-              if(strtolower($tokens[0]) == 'errorlog'){
-                $this->sites[$site_type][$file_conf]['ErrorLog'] = $tokens[1];
-              }
-              if(strtolower($tokens[0]) == 'customlog'){
-                $this->sites[$site_type][$file_conf]['CustomLog'] = $tokens[1];
-              }
-              if(strtolower($tokens[0]) == 'loglevel'){
-                $this->sites[$site_type][$file_conf]['LogLevel'] = $tokens[1];
+              if(isset($tokens[0]) and isset($tokens[1])){
+                $tokens[1] = str_replace('"', "", $tokens[1]);
+                $tokens[1] = str_replace("'", "", $tokens[1]);
+                $tokens[1] = trim($tokens[1]);
+
+                if(strtolower($tokens[0]) == 'documentroot'){
+                  $this->sites[$site_type][$file_conf]['DocumentRoot'] = $tokens[1];
+                }
+                if(strtolower($tokens[0]) == 'servername'){
+                  $this->sites[$site_type][$file_conf]['ServerName'] = $tokens[1];
+                }
+                if(strtolower($tokens[0]) == 'serveralias'){
+                  $this->sites[$site_type][$file_conf]['ServerAlias'] = $tokens[1];
+                }
+
+                if(strtolower($tokens[0]) == 'errorlog'){
+                  $this->sites[$site_type][$file_conf]['ErrorLog'] = $tokens[1];
+                }
+                if(strtolower($tokens[0]) == 'customlog'){
+                  $this->sites[$site_type][$file_conf]['CustomLog'] = $tokens[1];
+                }
+                if(strtolower($tokens[0]) == 'loglevel'){
+                  $this->sites[$site_type][$file_conf]['LogLevel'] = $tokens[1];
+                }
               }
             }
           }
@@ -82,5 +83,4 @@ class apache2 {
   public function __destruct() {
     
   }
-  
 }
