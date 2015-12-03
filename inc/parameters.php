@@ -35,3 +35,5 @@ display_message('Paramters');
 foreach ($params as $key => $param){
   display_message($key . ': ' . $param);
 }
+
+$date = date('Ymd');

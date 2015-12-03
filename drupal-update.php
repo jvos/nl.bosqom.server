@@ -1,11 +1,5 @@
 <?php
-
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-include_once 'display_message.php';
+include_once 'inc/display_message.php';
 
 $params = array();
 $params['user'] = '--user, is de sudo gebruikersnaam, b.v. root.';
@@ -16,7 +10,7 @@ $params['backup-dir'] = '--backup_dir, waar de backup bestanden moeten komen (st
 $params['chown'] = '--chown, is de gebruiker en de groep die de rechten krijgt van de bestanden, b.v. www-data:www-data (standaard op www-data:www-data).';
 $params['chmod'] = '--chmod, is de rechten die de bestanden krijgen, b.v. 755 (standaard op 770).';
 
-include_once 'parameters.php';
+include_once 'inc/parameters.php';
 
 echo('') . PHP_EOL . PHP_EOL;
 
@@ -61,55 +55,16 @@ if(!isset($params['chmod']) or empty($params['chmod'])){
   $params['chmod'] = '770';
 }
 
-include_once 'apache2.php';
-include_once 'drupal.php';
-include_once 'drush.php';
-include_once 'mysqldump.php';
-include_once 'linux.php';
-include_once 'exec.php';
-
-echo('') . PHP_EOL;
-display_message('Apache2 initialiseren !');
-$apache2 = new apache2();
-$vhosts = $apache2->getVirtualHostBySiteType('sites-enabled');
-
-$date = date('Ymd');
-
-echo('') . PHP_EOL;
-display_message('Exec initialiseren !');
-$exec = new exec($params['user'], $params['pass']);
+include_once 'inc/date.inc';
 
 $error = false;
 
-if(!$error){
-  echo('') . PHP_EOL;
-  display_message('Linux initialiseren !');
-  try {
-    $linux = new linux($exec);
-  }catch (Exception $e) {
-    display_message(sprintf('Bij initialiseren class linux, catch: %s !', $e->getMessage()), 'error');
-    $error = true;
-  }
-}
+include_once 'inc/apache2-init.inc';
+include_once 'inc/exec-init.inc';
+include_once 'inc/linux-init.inc';
+include_once 'inc/php-init.inc';
 
-if(!$error){
-  echo('') . PHP_EOL;
-  display_message('PHP initialiseren !');
-  try {
-    $php = new php($linux);
-  }catch (Exception $e) {
-    display_message(sprintf('Bij initialiseren class php, catch: %s !', $e->getMessage()), 'error');
-    $error = true;
-  }
-}
-
-if(!$error){
-  echo('') . PHP_EOL;
-  if($php->isRunning()){
-    display_message('PHP script draaid al, sluit het andere script of wacht tot het andere script klaar is !');
-    $error = true;
-  }
-}
+include_once 'inc/php-isRunning.inc';
 
 if(!$error){
   foreach($vhosts as $vhost){
@@ -122,134 +77,26 @@ if(!$error){
 
     echo('') . PHP_EOL . PHP_EOL;
     display_message('Start met ' . $vhost['ServerName']);
-
-    echo('') . PHP_EOL;
-    display_message('Drush initialiseren !');
-
-    try {
-      $drush = new drush($exec, $vhost['DocumentRoot']);
-    }catch (Exception $e) {
-      display_message(sprintf('Bij initialiseren class drush, catch: %s !', $e->getMessage()), 'error');
-      $error = true;
-    }
-
-    if(!$error){
-      echo('') . PHP_EOL;
-      display_message('Zet de site in offline modus !');
-      if(false === $output = $drush->offline(1)){
-        display_message('Bij de site in offline modus te zetten !', 'error');
-        $error = true;
-      }else {
-        if($drush->check_error($output)){
-          display_message('Bij de site in offline modus te zetten !', 'error');
-          $error = true;
-        }else {
-          display_message('Site is in offline modus gezet !', 'success');
-        }
-      }
-    }
-
-    if(!$error){
-      echo('') . PHP_EOL; 
-      display_message('Drupal initialiseren !');
-      try {
-        $drupal = new drupal($vhost['DocumentRoot'], $vhost['ServerName']);
-      }catch (Exception $e) {
-        display_message(sprintf('Bij initialiseren class drupal, catch: %s !', $e->getMessage()), 'error');
-        $error = true;
-      }
-    }
-
-    if(!$error){
-      echo('') . PHP_EOL;
-      display_message('Backup drupal database !');
-
-      if(!$settings = $drupal->getSettings()){
-        display_message('settings.php bestaat niet !', 'error');
-        $error = true;
-      }else {
-        display_message('settings.php ingelezen !', 'success');
-      }
-    }
-
-    if(!$error){
-      if(!$database = $drupal->getDatabase()){
-        display_message('Geen database settings in de settings.php !', 'error');
-        $error = true;
-      }else {
-        display_message('Database settings opgehaalt !', 'success');
-      }
-    }
-
-    if(!$error){
-      echo('') . PHP_EOL;
-      display_message('Mysqldump initialiseren !');
-      try {
-        $mysqldump = new mysqldump($exec, $database['host'], $database['username'], $database['password'], $database['database'], $params['backup-dir'] . '/' . $database['database'] . '_bak_' . $date . '.sql');
-      }catch (Exception $e) {
-        display_message(sprintf('Bij initialiseren class mysqldump, catch: %s !', $e->getMessage()), 'error');
-        $error = true;
-      }
-    }
-
-    /*if(!$error){
-      if(false === $output = $mysqldump->dump()){
-        display_message('Bij backuppen van de drupal database !', 'error');
-        $error = true;      
-      }else {
-        if($drush->check_error($output)){
-          display_message('Bij backuppen van de drupal database !', 'error');
-          $error = true;
-        }else {
-          display_message('Drupal database gebackupped !', 'success');
-        }
-      }
-    }*/
-
-    /*if(!$error){
-      echo('') . PHP_EOL;
-      display_message('Backup bestanden !');
-
-      if(false === $output = $linux->cp($vhost['DocumentRoot'], $params['backup-dir'] . '/' . $vhost['ServerName'] . '_bak_' . $date)){
-        display_message('Bij backuppen van de bestanden !', 'error');
-        $error = true;
-      }else {
-        if($drush->check_error($output)){
-          display_message('Bij backuppen van de bestanden !', 'error');
-          $error = true;
-        }else {
-          display_message('Bestanden gebackupped !', 'success');
-        }
-      }
-    }*/
-
-    if(!$error){
-      echo('') . PHP_EOL;
-      display_message('Update drupal cron !');
-      if(!$drupal->runCron()){
-        display_message('Bij update van de drupal cron !', 'error');
-        $error = true;
-      }else {
-        display_message('Drupal cron geupdated !', 'success');
-      }
-    }
-
-    if(!$error){
-      echo('') . PHP_EOL;
-      display_message('Refresh drupal via drush !');
-      if(false === $output = $drush->refresh()){
-        display_message('Bij refresh van de drupal via drush !', 'error');
-        $error = true;
-      }else {
-        if($drush->check_error($output)){
-          display_message('Bij refresh van de drupal via drush !', 'error');
-          $error = true;
-        }else {
-          display_message('Drupal gerefreshed via drush !', 'success');
-        }
-      }
-    }
-
+    
+    include_once 'inc/drush-init.inc';
+    include_once 'inc/drupal-init.inc';
+    
+    // set site offline
+    include_once 'inc/drush-offline.inc';
+    
+    // create a mysqldump of drupal database
+    include_once 'inc/drupal-mysqldump.inc';
+    
+    // create a backup of all the files 
+    include_once 'inc/linux-cp.inc';
+    
+    // run drupal cron
+    include_once 'inc/drupal-cron.inc';
+    
+    // refresh drupal
+    include_once 'inc/drush-refresh.inc';
+    
+    // drush execute
     if(!$error){
       echo('') . PHP_EOL;
       display_message('Drupal updaten via drush met cmd !');
@@ -265,56 +112,15 @@ if(!$error){
         }
       }
     }
-
-    if(!$error){
-      echo('') . PHP_EOL;
-      display_message('Zet de gebruiker en groep van de bestanden goed !');
-      if(!$linux->chown($vhost['DocumentRoot'], $params['chown'])){
-        display_message('Bij het zetten van de gebruikers en groep van de bestanden !', 'error');
-        $error = true;
-      }else {
-        display_message('Gebruikers en groep bestanden goed gezet !', 'success');
-      }
-    }
-
-    if(!$error){
-      display_message('Zet de rechten van de bestanden goed !');
-      if(!$linux->chmod($vhost['DocumentRoot'], $params['chmod'])){
-        display_message('Bij het zetten van de rechten van de bestanden !', 'error');
-        $error = true;
-      }else {
-        display_message('Het zetten van de rechten van de bestanden !', 'success');
-      }
-    }
-
-    echo('') . PHP_EOL;
-    display_message('Zet de site weer online !');
-    if(false === $output = $drush->offline(0)){
-      display_message('Bij de site weer online zetten !', 'error');
-      $error = true;
-    }else {
-      if($drush->check_error($output)){
-        display_message('Bij de site weer online zetten !', 'error');
-        $error = true;
-      }else {
-        display_message('Site weer online gezet !', 'success');
-      }
-    }
-
-    if(!$error){
-      echo('') . PHP_EOL;
-      display_message('Clear all cache !');
-      if(false === $output = $drush->clear_cache()){
-        display_message('Bij het clearen van de cache !', 'error');
-        $error = true;
-      }else {
-        if($drush->check_error($output)){
-          display_message('Bij het clearen van de cache !', 'error');
-          $error = true;
-        }else {
-          display_message('Cache gecleared !', 'success');
-        }
-      }
-    }
+    
+    // setrights
+    include_once 'inc/linux-chown.inc';
+    include_once 'inc/linux-chmod.inc';
+    
+    // set site online
+    include_once 'inc/drush-online.inc';
+    
+    // clear cache all
+    include_once 'inc/drush-cc-all.inc';
   }
 }

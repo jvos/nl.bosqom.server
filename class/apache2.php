@@ -17,6 +17,10 @@ class apache2 {
     $this->setVirtualHost();
   }
   
+  public static function display_message($message, $status = 'info'){
+    display_message($message, $status);
+  }
+  
   private function setVirtualHost(){
     $this->sites = [];
     foreach($this->sites_type as $site_type){
@@ -29,7 +33,7 @@ class apache2 {
         $this->sites[$site_type][$file_conf] = [];
         
         if(!$handle = fopen($this->path . '/' . $site_type . '/' . $file_conf, 'r')){
-          display_message(sprintf('Class apache2, function getVirtualHost, can not open %s !', $this->path . '/' . $site_type . '/' . $file_conf), 'error');
+          apache2::display_message(sprintf('Class apache2, function getVirtualHost, can not open %s !', $this->path . '/' . $site_type . '/' . $file_conf), 'error');
           
         }else {
           while(!feof($handle)){

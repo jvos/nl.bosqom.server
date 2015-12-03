@@ -25,13 +25,13 @@ class civicrm {
   
   public function __construct($document_root, $server_name, $backup_dir) {
     if(empty($document_root)){
-      throw new Exception('[ERROR] Class civicrm, function __construct, $document_root is leeg !');
+      throw new Exception(civicrm::display_message('[ERROR] Class civicrm, function __construct, $document_root is leeg !', 'error'));
     }
     if(empty($server_name)){
-      throw new Exception('[ERROR] Class civicrm, function __construct, $server_name is leeg !');
+      throw new Exception(civicrm::display_message('[ERROR] Class civicrm, function __construct, $server_name is leeg !', 'error'));
     }
     if(empty($backup_dir)){
-      throw new Exception('[ERROR] Class civicrm, function __construct, $backup_dir is leeg !');
+      throw new Exception(civicrm::display_message('[ERROR] Class civicrm, function __construct, $backup_dir is leeg !', 'error'));
     }
     
     $this->document_root = $document_root;
@@ -43,6 +43,10 @@ class civicrm {
   
   public function __destruct() {
     
+  }
+  
+  public static function display_message($message, $status = 'info'){
+    display_message($message, $status);
   }
 
   private function setSettings(){
@@ -120,9 +124,5 @@ class civicrm {
     }
     
     return true;
-  }
-  
-  public static function display_message($message, $status = 'info'){
-    display_message($message, $status);
   }
 }

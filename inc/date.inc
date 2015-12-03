@@ -1,0 +1,2 @@
+<?php
+$date = date('Ymd');
