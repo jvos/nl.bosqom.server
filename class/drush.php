@@ -103,7 +103,16 @@ class drush {
         $package = trim($array[0]);
         $naam = trim($array[1]);
         $versie = trim($array[2]);
-        $module = substr($array[1], strrpos($array[1], '(')+1, strrpos($array[1], ')')-1-strrpos($array[1], '('));
+        
+        
+        $module = '';
+        if(!empty($package) and !empty($naam) and !empty($versie) and 'Package' != $package){
+          // sometimes the Module is on the next line
+          if(false !== strrpos($array[1], '(')){
+            $module = substr($array[1], strrpos($array[1], '(')+1, strrpos($array[1], ')')-1-strrpos($array[1], '('));
+          }else {
+            $module = substr($output[($key+1)], strrpos($output[($key+1)], '(')+1, strrpos($output[($key+1)], ')')-1-strrpos($output[($key+1)], '('));
+          }
         
         if(!empty($package) and !empty($naam) and !empty($versie) and !empty($module) and 'Package' != $package){
           $list[] = ['Package' => $package, 'Naam' => $naam, 'Versie' => $versie, 'Module' => $module];
