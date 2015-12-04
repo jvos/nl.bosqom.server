@@ -67,7 +67,7 @@ class drush {
   
   public function execute($cmd){
     if( false === strpos($cmd, 'drush')){
-      drush::display_message('Class drush, function __construct, command is not a druhs command !', 'error');
+      drush::message('Class drush, function __construct, command is not a druhs command !', 'error');
       return false;
     }
     
@@ -139,7 +139,7 @@ class drush {
     return false;
   }
   
-  public static function display_message($message, $status = 'info'){
-    display_message($message, $status);
+  public static function message($message, $status = 'info'){
+    message($message, $status);
   }
 }

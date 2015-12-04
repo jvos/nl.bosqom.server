@@ -1,5 +1,5 @@
 <?php
-include_once 'inc/display_message.php';
+include_once 'inc/message.php';
 
 $params = array();
 $params['user'] = '--user, is de sudo gebruikersnaam, b.v. root.';
@@ -11,25 +11,23 @@ include_once 'inc/parameters.php';
 echo('') . PHP_EOL . PHP_EOL;
 
 if(!isset($params['user']) or empty($params['user'])){
-  display_message('Geen gebruikersnaam van de sudo user (--user) !', 'error');
-  display_message('Voor sommige opdrachten heb je de sudo gebruiker nodig !', 'warning');
+  message('Geen gebruikersnaam van de sudo user (--user) !', 'error');
+  message('Voor sommige opdrachten heb je de sudo gebruiker nodig !', 'warning');
   return false;
 }
 
 if(!isset($params['pass']) or empty($params['pass'])){
-  display_message('Geen wachtwoord van de sudo user (--pass) !', 'error');
-  display_message('Voor sommige opdrachten heb je de sudo gebruiker nodig !', 'warning');
+  message('Geen wachtwoord van de sudo user (--pass) !', 'error');
+  message('Voor sommige opdrachten heb je de sudo gebruiker nodig !', 'warning');
   return false;
 }
 
 if(!isset($params['server_name']) or empty($params['server_name'])){
-  display_message('Geen server naam (--server_name) !', 'error');
-  display_message('De server_name moet zoiets zijn als www.bosqom.nl.', 'warning');
-  display_message('Of als je alle websites wilt updaten gebruik dan all.', 'warning');
+  message('Geen server naam (--server_name) !', 'error');
+  message('De server_name moet zoiets zijn als www.bosqom.nl.', 'warning');
+  message('Of als je alle websites wilt updaten gebruik dan all.', 'warning');
   return false;
 }
-
-include_once 'inc/date.inc';
 
 $error = false;
 
@@ -51,17 +49,19 @@ if(!$error){
     
     if(empty($vhost['DocumentRoot']) or empty($vhost['ServerName'])){
       echo('') . PHP_EOL . PHP_EOL;
-      display_message(sprintf('De vhost met bestand naam %s, is overgeslagen, omdat hij geen document root of server name heeft !', $name));
+      message(sprintf('De vhost met bestand naam %s, is overgeslagen, omdat hij geen document root of server name heeft !', $name));
       continue;
     }
 
     echo('') . PHP_EOL . PHP_EOL;
-    display_message('Start met ' . $vhost['ServerName']);
+    message('Start met ' . $vhost['ServerName']);
     
-    include_once 'inc/drush-init.inc';
-    include_once 'inc/drupal-init.inc';
+    //$error = false;
+    
+    include 'inc/drush-init.inc';
+    include 'inc/drupal-init.inc';
     
     // get drupal modules enabled
-    include_once 'inc/drush-modules_enabled.inc';
+    include 'inc/drush-modules_enabled.inc';
   }
 }

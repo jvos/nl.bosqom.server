@@ -27,7 +27,7 @@ class exec {
 
   public function run($commands){
     if(empty($commands)){
-      exec::display_message('Class exec, function run, $commands is leeg !', 'error');
+      exec::message('Class exec, function run, $commands is leeg !', 'error');
       return false;
     }
     
@@ -43,27 +43,27 @@ class exec {
     $command = substr($command, 0, -4);
     $command .= ' 2>&1';
     
-    exec::display_message(sprintf("Class exec, function run, Het volgende command word uitgevoerd: %s", $command));
+    exec::message(sprintf("Class exec, function run, Het volgende command word uitgevoerd: %s", $command));
     
     $output = [];
     $return_var = -1;
     
     exec($command, $output, $return_var);
-    exec::display_message(sprintf("Class exec, function run, De return van het command: %s", $return_var));
+    exec::message(sprintf("Class exec, function run, De return van het command: %s", $return_var));
     
-    exec::display_message('Class exec, function run, De ouput van het command: ');
+    exec::message('Class exec, function run, De ouput van het command: ');
     echo(implode(PHP_EOL, $output)) . PHP_EOL;
     
     if(empty($return_var)){
       return $output;
       
     }else {
-      exec::display_message('Class exec, function run, Er is een error bij het uitvoeren van het command !', 'error');
+      exec::message('Class exec, function run, Er is een error bij het uitvoeren van het command !', 'error');
       return false;
     }
   }
   
-  public static function display_message($message, $status = 'info'){
-    display_message($message, $status);
+  public static function message($message, $status = 'info'){
+    message($message, $status);
   }
 }

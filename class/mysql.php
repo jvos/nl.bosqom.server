@@ -20,17 +20,17 @@ class mysql {
     }
   }
   
-  public static function display_message($message, $status = 'info'){
-    display_message($message, $status);
+  public static function message($message, $status = 'info'){
+    message($message, $status);
   }
   
   public function mysql_connect($host, $username, $password, $database){
     if(!$this->link = mysql_connect($host, $username, $password)) { 
-      mysql::display_message(sprintf("Class mysql, function mysql_connect, error %s", mysql_error), 'error');
+      mysql::message(sprintf("Class mysql, function mysql_connect, error %s", mysql_error), 'error');
       return false;
     } 
     elseif(!mysql_select_db($database, $this->link)) { 
-      mysql::display_message(sprintf("Class mysql, function mysql_select_db, error %s", mysql_error), 'error');
+      mysql::message(sprintf("Class mysql, function mysql_select_db, error %s", mysql_error), 'error');
       return false;
     } 
     return true;

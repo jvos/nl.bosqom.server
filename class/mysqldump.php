@@ -50,8 +50,8 @@ class mysqldump {
     
   }
   
-  public static function display_message($message, $status = 'info'){
-    display_message($message, $status);
+  public static function message($message, $status = 'info'){
+    message($message, $status);
   }
 
   public function dump(){

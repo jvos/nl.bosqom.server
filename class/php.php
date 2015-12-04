@@ -41,11 +41,23 @@ class php {
   }
   
   private function setFileName(){
-    $this->filename = substr($this->server['SCRIPT_FILENAME'], strrpos($this->server['SCRIPT_FILENAME'], '/')+1);
+    if(false === strpos($_SERVER['SCRIPT_FILENAME'], '/')){
+      $this->filename = $_SERVER['SCRIPT_FILENAME'];
+    }else {
+      $this->filename = substr($this->server['SCRIPT_FILENAME'], strrpos($this->server['SCRIPT_FILENAME'], '/')+1);
+    }
+    
+    echo('$this->filename: ' . $this->filename) . PHP_EOL;
   }
   
   private function setFilePath(){
-   $this->filepath = substr($this->server['SCRIPT_FILENAME'], 0, strrpos($this->server['SCRIPT_FILENAME'], '/'));
+    if(false === strpos($_SERVER['SCRIPT_FILENAME'], '/')){
+      $this->filepath = '';
+    }else {
+      $this->filepath = substr($this->server['SCRIPT_FILENAME'], 0, strrpos($this->server['SCRIPT_FILENAME'], '/'));
+    }
+    
+    echo('$this->filepath: ' . $this->filepath) . PHP_EOL;
   }
   
   public function isRunning(){    

@@ -25,13 +25,13 @@ class civicrm {
   
   public function __construct($document_root, $server_name, $backup_dir) {
     if(empty($document_root)){
-      throw new Exception(civicrm::display_message('[ERROR] Class civicrm, function __construct, $document_root is leeg !', 'error'));
+      throw new Exception(civicrm::message('[ERROR] Class civicrm, function __construct, $document_root is leeg !', 'error'));
     }
     if(empty($server_name)){
-      throw new Exception(civicrm::display_message('[ERROR] Class civicrm, function __construct, $server_name is leeg !', 'error'));
+      throw new Exception(civicrm::message('[ERROR] Class civicrm, function __construct, $server_name is leeg !', 'error'));
     }
     if(empty($backup_dir)){
-      throw new Exception(civicrm::display_message('[ERROR] Class civicrm, function __construct, $backup_dir is leeg !', 'error'));
+      throw new Exception(civicrm::message('[ERROR] Class civicrm, function __construct, $backup_dir is leeg !', 'error'));
     }
     
     $this->document_root = $document_root;
@@ -45,8 +45,8 @@ class civicrm {
     
   }
   
-  public static function display_message($message, $status = 'info'){
-    display_message($message, $status);
+  public static function message($message, $status = 'info'){
+    message($message, $status);
   }
 
   private function setSettings(){
@@ -74,7 +74,7 @@ class civicrm {
       $this->databases['host'] = $this->host;
       
     }else {
-      civicrm::display_message('Class civicrm, function setSettings, Geen civicrm.settings.php bestand !', 'error');
+      civicrm::message('Class civicrm, function setSettings, Geen civicrm.settings.php bestand !', 'error');
       $this->settings = false;
     }
   }

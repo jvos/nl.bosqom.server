@@ -100,7 +100,7 @@ class drupal {
         $this->settings['conf'] = $conf;
       }
     }else {
-      $this->display_message('Class drupal, function setSettings, Geen settings.php bestand !', 'error');
+      $this->message('Class drupal, function setSettings, Geen settings.php bestand !', 'error');
       $this->settings = false;
     }
   }
@@ -186,7 +186,7 @@ class drupal {
     }
   }
     
-  public function display_message($message, $status = 'info'){
-    display_message($message, $status);
+  public function message($message, $status = 'info'){
+    message($message, $status);
   }
 }

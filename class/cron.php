@@ -14,14 +14,14 @@ class cron {
       throw new Exception('[ERROR] Class cron, function executeUrl, $url is empty !');
     }
     
-    cron::display_message(sprintf("Class cron, function executeUrl, de volgende url word aangeroepen: %s", $url));
+    cron::message(sprintf("Class cron, function executeUrl, de volgende url word aangeroepen: %s", $url));
         
     // Create a curl handle to a non-existing location
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $content = '';
     if( ($content = curl_exec($ch) ) === false){
-      cron::display_message(sprintf("Class cron, function executeUrl, curl_exec error: %s", curl_error($ch)), 'error');
+      cron::message(sprintf("Class cron, function executeUrl, curl_exec error: %s", curl_error($ch)), 'error');
       
       // Close handle
       curl_close($ch);
@@ -42,10 +42,10 @@ class cron {
       throw new Exception('[ERROR] Class cron, function downloadUrl, $path is empty !');
     }
     
-    cron::display_message(sprintf("Class cron, function downloadUrl, de volgende url word aangeroepen: %s, naar %s/%s !", $url, $path, $name));
+    cron::message(sprintf("Class cron, function downloadUrl, de volgende url word aangeroepen: %s, naar %s/%s !", $url, $path, $name));
     
     if(!$fp = fopen($path . '/' . $name, 'w+')){ //This is the file where we save the information
-      cron::display_message(sprintf("Class cron, function downloadUrl, fopen error !"), 'error');
+      cron::message(sprintf("Class cron, function downloadUrl, fopen error !"), 'error');
       fclose($fp);
       return false;
     }
@@ -57,7 +57,7 @@ class cron {
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     
     if(false === curl_exec($ch)){
-      cron::display_message(sprintf("Class cron, function downloadUrl, curl_exec error: %s", curl_error($ch)), 'error');
+      cron::message(sprintf("Class cron, function downloadUrl, curl_exec error: %s", curl_error($ch)), 'error');
       
       // Close handle
       curl_close($ch);
@@ -71,7 +71,7 @@ class cron {
     return true;
   }
 
-  public static function display_message($message, $status = 'info'){
-    display_message($message, $status);
+  public static function message($message, $status = 'info'){
+    message($message, $status);
   }
 }

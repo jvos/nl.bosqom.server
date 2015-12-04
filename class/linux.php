@@ -23,17 +23,17 @@ class linux {
     
   }
   
-  public static function display_message($message, $status = 'info'){
-    display_message($message, $status);
+  public static function message($message, $status = 'info'){
+    message($message, $status);
   }
   
   public function chown($path, $owner_groep, $is_file = false){
     if(empty($path)){
-      linux::display_message('Class linux, function chown, $path is leeg !', 'error');
+      linux::message('Class linux, function chown, $path is leeg !', 'error');
       return false;
     }
     if(empty($owner_groep)){
-      linux::display_message('Class linux, function chown, $owner_groep is leeg !', 'error');
+      linux::message('Class linux, function chown, $owner_groep is leeg !', 'error');
       return false;
     }
     
@@ -48,11 +48,11 @@ class linux {
   
   public function chmod($path, $permission, $is_file = false){
     if(empty($path)){
-      linux::display_message('Class linux, function chmod, $path is leeg !', 'error');
+      linux::message('Class linux, function chmod, $path is leeg !', 'error');
       return false;
     }
     if(empty($permission)){
-      linux::display_message('Class linux, function chmod, $permission is leeg !', 'error');
+      linux::message('Class linux, function chmod, $permission is leeg !', 'error');
       return false;
     }
     
@@ -67,11 +67,11 @@ class linux {
   
   public function cp($path, $to_path){
     if(empty($path)){
-      linux::display_message('Class linux, function cp, $path is leeg !', 'error');
+      linux::message('Class linux, function cp, $path is leeg !', 'error');
       return false;
     }
     if(empty($to_path)){
-      linux::display_message('Class linux, function cp, $to_path is leeg !', 'error');
+      linux::message('Class linux, function cp, $to_path is leeg !', 'error');
       return false;
     }
     

@@ -1,5 +1,5 @@
 <?php
-include_once 'inc/display_message.php';
+include_once 'inc/message.php';
 
 $params = array();
 $params['user'] = '--user, is de sudo gebruikersnaam, b.v. root.';
@@ -15,43 +15,43 @@ include_once 'inc/parameters.php';
 echo('') . PHP_EOL . PHP_EOL;
 
 if(!isset($params['user']) or empty($params['user'])){
-  display_message('Geen gebruikersnaam van de sudo user (--user) !', 'error');
-  display_message('Voor sommige opdrachten heb je de sudo gebruiker nodig !', 'warning');
+  message('Geen gebruikersnaam van de sudo user (--user) !', 'error');
+  message('Voor sommige opdrachten heb je de sudo gebruiker nodig !', 'warning');
   return false;
 }
 
 if(!isset($params['pass']) or empty($params['pass'])){
-  display_message('Geen wachtwoord van de sudo user (--pass) !', 'error');
-  display_message('Voor sommige opdrachten heb je de sudo gebruiker nodig !', 'warning');
+  message('Geen wachtwoord van de sudo user (--pass) !', 'error');
+  message('Voor sommige opdrachten heb je de sudo gebruiker nodig !', 'warning');
   return false;
 }
 
 if(!isset($params['server_name']) or empty($params['server_name'])){
-  display_message('Geen server naam (--server_name) !', 'error');
-  display_message('De server_name moet zoiets zijn als www.bosqom.nl.', 'warning');
-  display_message('Of als je alle websites wilt updaten gebruik dan all.', 'warning');
+  message('Geen server naam (--server_name) !', 'error');
+  message('De server_name moet zoiets zijn als www.bosqom.nl.', 'warning');
+  message('Of als je alle websites wilt updaten gebruik dan all.', 'warning');
   return false;
 }
 
 if(!isset($params['cmd']) or empty($params['cmd'])){
-  display_message('Geen opdracht (--cmd) !', 'error');
-  display_message('De opdracht moet zoiets zijn als drush up.', 'warning');
-  display_message('De opdracht is het zelfde als een normale drush opdracht.', 'warning');
+  message('Geen opdracht (--cmd) !', 'error');
+  message('De opdracht moet zoiets zijn als drush up.', 'warning');
+  message('De opdracht is het zelfde als een normale drush opdracht.', 'warning');
   return false;
 }
 
 if(!isset($params['backup-dir']) or empty($params['backup-dir'])){
-  display_message('Geen backup-dir (--backup-dir) , de backup-dir word /var/tmp !', 'warning');
+  message('Geen backup-dir (--backup-dir) , de backup-dir word /var/tmp !', 'warning');
   $params['backup-dir'] = '/var/tmp';
 }
 
 if(!isset($params['chown']) or empty($params['chown'])){
-  display_message('Geen chown (--chown) , de chown word www-data:www-data !', 'warning');
+  message('Geen chown (--chown) , de chown word www-data:www-data !', 'warning');
   $params['chown'] = 'www-data:www-data';
 }
 
 if(!isset($params['chmod']) or empty($params['chmod'])){
-  display_message('Geen chmod (--chmod) , de chmod word 770 !', 'warning');
+  message('Geen chmod (--chmod) , de chmod word 770 !', 'warning');
   $params['chmod'] = '770';
 }
 
@@ -76,7 +76,7 @@ if(!$error){
     }
 
     echo('') . PHP_EOL . PHP_EOL;
-    display_message('Start met ' . $vhost['ServerName']);
+    message('Start met ' . $vhost['ServerName']);
     
     include_once 'inc/drush-init.inc';
     include_once 'inc/drupal-init.inc';
@@ -99,16 +99,16 @@ if(!$error){
     // drush execute
     if(!$error){
       echo('') . PHP_EOL;
-      display_message('Drupal updaten via drush met cmd !');
+      message('Drupal updaten via drush met cmd !');
       if(false === $output = $drush->execute($params['cmd'] . ' --backupdir="' . $params['backup-dir'] . '"')){
-        display_message('Bij update van de drupal via drush met cmd !', 'error');
+        message('Bij update van de drupal via drush met cmd !', 'error');
         $error = true;
       }else {      
         if($drush->check_error($output)){
-          display_message('Bij update van de drupal via drush met cmd !', 'error');
+          message('Bij update van de drupal via drush met cmd !', 'error');
           $error = true;
         }else {
-          display_message('Updaten van drupal via drush met cmd !', 'success');
+          message('Updaten van drupal via drush met cmd !', 'success');
         }
       }
     }

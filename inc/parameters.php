@@ -30,10 +30,10 @@ foreach ($argv as $arg) {
   }
 }
 
-display_message('Paramters');
+message('Paramters');
 
 foreach ($params as $key => $param){
-  display_message($key . ': ' . $param);
+  message($key . ': ' . $param);
 }
 
 $date = date('Ymd');
