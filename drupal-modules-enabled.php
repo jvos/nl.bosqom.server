@@ -4,6 +4,7 @@ include_once 'inc/message.php';
 $params = array();
 $params['user'] = '--user, is de sudo gebruikersnaam, b.v. root.';
 $params['pass'] = '--pass, is de sudo wachtwoord van de gebruiker.';
+$params['drush-bin'] = '--drush-bin, waar drush staat op de server (standaard staat op /usr/bin).';
 $params['server_name'] = '--server_name, welke website met servernaam er geupdate moet worden, kan ook \'all\' zijn voor alle websites, b.v. bosqom.nl.';
 
 include_once 'inc/parameters.php';
