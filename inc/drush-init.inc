@@ -5,7 +5,7 @@ echo('') . PHP_EOL;
 message('Drush initialiseren !');
 
 try {
-  $drush = new drush($exec, $vhost['DocumentRoot']);
+  $drush = new drush($exec, $vhost['DocumentRoot'], $params['drush-bin']);
 }catch (Exception $e) {
   message(sprintf('Bij initialiseren class drush, catch: %s !', $e->getMessage()), 'error');
   $error = true;

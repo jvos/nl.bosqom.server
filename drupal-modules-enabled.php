@@ -11,15 +11,20 @@ include_once 'inc/parameters.php';
 echo('') . PHP_EOL . PHP_EOL;
 
 if(!isset($params['user']) or empty($params['user'])){
-  message('Geen gebruikersnaam van de sudo user (--user) !', 'error');
+  message('Geef gebruikersnaam van de sudo user (--user) !', 'error');
   message('Voor sommige opdrachten heb je de sudo gebruiker nodig !', 'warning');
   return false;
 }
 
 if(!isset($params['pass']) or empty($params['pass'])){
-  message('Geen wachtwoord van de sudo user (--pass) !', 'error');
+  message('Geef wachtwoord van de sudo user (--pass) !', 'error');
   message('Voor sommige opdrachten heb je de sudo gebruiker nodig !', 'warning');
   return false;
+}
+
+if(!isset($params['drush-bin']) or empty($params['drush-bin'])){
+  message('Geef het path op van drush (--drush-bin) !', 'warning');
+  $params['drush-bin'] = '/usr/bin';
 }
 
 if(!isset($params['server_name']) or empty($params['server_name'])){
