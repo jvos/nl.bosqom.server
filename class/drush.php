@@ -113,6 +113,7 @@ class drush {
           }else {
             $module = substr($output[($key+1)], strrpos($output[($key+1)], '(')+1, strrpos($output[($key+1)], ')')-1-strrpos($output[($key+1)], '('));
           }
+        }
         
         if(!empty($package) and !empty($naam) and !empty($versie) and !empty($module) and 'Package' != $package){
           $list[] = ['Package' => $package, 'Naam' => $naam, 'Versie' => $versie, 'Module' => $module];
