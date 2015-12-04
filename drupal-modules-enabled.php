@@ -55,7 +55,7 @@ if(!$error){
       continue;
     }
 
-    echo('') . PHP_EOL . PHP_EOL;
+    message('') . PHP_EOL . PHP_EOL;
     message('Start met ' . $vhost['ServerName']);
         
     include 'inc/drush-init.inc';
