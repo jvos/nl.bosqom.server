@@ -47,6 +47,10 @@ if(!$error){
       continue;
     }
     
+    if(!$error){
+      exit();
+    }
+    
     if(empty($vhost['DocumentRoot']) or empty($vhost['ServerName'])){
       echo('') . PHP_EOL . PHP_EOL;
       message(sprintf('De vhost met bestand naam %s, is overgeslagen, omdat hij geen document root of server name heeft !', $name));
@@ -55,9 +59,7 @@ if(!$error){
 
     echo('') . PHP_EOL . PHP_EOL;
     message('Start met ' . $vhost['ServerName']);
-    
-    //$error = false;
-    
+        
     include 'inc/drush-init.inc';
     include 'inc/drupal-init.inc';
     

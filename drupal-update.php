@@ -1,4 +1,6 @@
 <?php
+exit();
+
 include_once 'inc/message.php';
 
 $params = array();
