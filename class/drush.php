@@ -111,7 +111,9 @@ class drush {
           if(false !== strrpos($array[1], '(')){
             $module = substr($array[1], strrpos($array[1], '(')+1, strrpos($array[1], ')')-1-strrpos($array[1], '('));
           }else {
-            $module = substr($output[($key+1)], strrpos($output[($key+1)], '(')+1, strrpos($output[($key+1)], ')')-1-strrpos($output[($key+1)], '('));
+            if(false !== strrpos($array[1], '(')){
+              $module = substr($output[($key+1)], strrpos($output[($key+1)], '(')+1, strrpos($output[($key+1)], ')')-1-strrpos($output[($key+1)], '('));
+            }
           }
         }
         
