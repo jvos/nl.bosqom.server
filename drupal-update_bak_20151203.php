@@ -160,7 +160,7 @@ if(!$error){
       }
     }
 
-    if(!$error){
+    /*if(!$error){
       echo('') . PHP_EOL;
       message('Backup drupal database !');
 
@@ -179,9 +179,9 @@ if(!$error){
       }else {
         message('Database settings opgehaalt !', 'success');
       }
-    }
+    }*/
 
-    if(!$error){
+    /*if(!$error){
       echo('') . PHP_EOL;
       message('Mysqldump initialiseren !');
       try {
@@ -190,7 +190,7 @@ if(!$error){
         message(sprintf('Bij initialiseren class mysqldump, catch: %s !', $e->getMessage()), 'error');
         $error = true;
       }
-    }
+    }*/
 
     /*if(!$error){
       if(false === $output = $mysqldump->dump()){
@@ -250,7 +250,7 @@ if(!$error){
       }
     }
 
-    if(!$error){
+    /*if(!$error){
       echo('') . PHP_EOL;
       message('Drupal updaten via drush met cmd !');
       if(false === $output = $drush->execute($params['cmd'] . ' --backupdir="' . $params['backup-dir'] . '"')){
@@ -264,9 +264,9 @@ if(!$error){
           message('Updaten van drupal via drush met cmd !', 'success');
         }
       }
-    }
+    }*/
 
-    if(!$error){
+    /*if(!$error){
       echo('') . PHP_EOL;
       message('Zet de gebruiker en groep van de bestanden goed !');
       if(!$linux->chown($vhost['DocumentRoot'], $params['chown'])){
@@ -275,9 +275,9 @@ if(!$error){
       }else {
         message('Gebruikers en groep bestanden goed gezet !', 'success');
       }
-    }
+    }*/
 
-    if(!$error){
+    /*if(!$error){
       message('Zet de rechten van de bestanden goed !');
       if(!$linux->chmod($vhost['DocumentRoot'], $params['chmod'])){
         message('Bij het zetten van de rechten van de bestanden !', 'error');
@@ -285,7 +285,7 @@ if(!$error){
       }else {
         message('Het zetten van de rechten van de bestanden !', 'success');
       }
-    }
+    }*/
 
     echo('') . PHP_EOL;
     message('Zet de site weer online !');

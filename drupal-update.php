@@ -85,10 +85,10 @@ if(!$error){
     include_once 'inc/drush-offline.inc';
     
     // create a mysqldump of drupal database
-    include_once 'inc/drupal-mysqldump.inc';
+    //include_once 'inc/drupal-mysqldump.inc';
     
     // create a backup of all the files 
-    include_once 'inc/linux-cp.inc';
+    //include_once 'inc/linux-cp.inc';
     
     // run drupal cron
     include_once 'inc/drupal-cron.inc';
@@ -97,7 +97,7 @@ if(!$error){
     include_once 'inc/drush-refresh.inc';
     
     // drush execute
-    if(!$error){
+    /*if(!$error){
       echo('') . PHP_EOL;
       message('Drupal updaten via drush met cmd !');
       if(false === $output = $drush->execute($params['cmd'] . ' --backupdir="' . $params['backup-dir'] . '"')){
@@ -111,11 +111,11 @@ if(!$error){
           message('Updaten van drupal via drush met cmd !', 'success');
         }
       }
-    }
+    }*/
     
     // setrights
-    include_once 'inc/linux-chown.inc';
-    include_once 'inc/linux-chmod.inc';
+    //include_once 'inc/linux-chown.inc';
+    //include_once 'inc/linux-chmod.inc';
     
     // set site online
     include_once 'inc/drush-online.inc';

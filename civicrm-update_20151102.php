@@ -104,11 +104,11 @@ foreach($vhosts as $vhost){
     continue;
   }
   
-  $mysqldump = new mysqldump($exec, $database['host'], $database['username'], $database['password'], $database['database'], $param['backup-dir'] . '/' . $database['database'] . '_bak_' . $date . '.sql');
+  /*$mysqldump = new mysqldump($exec, $database['host'], $database['username'], $database['password'], $database['database'], $param['backup-dir'] . '/' . $database['database'] . '_bak_' . $date . '.sql');
   $mysqldump->dump();
   
   echo('') . PHP_EOL;
-  echo('/*Backup civicrm database !*/') . PHP_EOL;
+  echo('/*Backup civicrm database !*//*') . PHP_EOL;
   
   $civicrm = new civicrm($vhost['DocumentRoot'], $vhost['ServerName']);
   
@@ -123,14 +123,14 @@ foreach($vhosts as $vhost){
   }  
   
   $mysqldump = new mysqldump($exec, $database['host'], $database['username'], $database['password'], $database['database'], $param['backup-dir'] . '/' . $database['database'] . '_bak_' . $date . '.sql');
-  $mysqldump->dump();
+  $mysqldump->dump();*/
   
   
-  echo('') . PHP_EOL;
+  /*echo('') . PHP_EOL;
   echo('/*Backup bestanden !*//*') . PHP_EOL;
   
   $linux = new linux($exec);
-  $linux->cp($vhost['DocumentRoot'], $param['backup-dir'] . '/' . $vhost['ServerName'] . '_bak_' . $date);
+  $linux->cp($vhost['DocumentRoot'], $param['backup-dir'] . '/' . $vhost['ServerName'] . '_bak_' . $date);*/
    
   echo('') . PHP_EOL;
   echo('/*Downlaod civicrm + vertalings bestand !*//*') . PHP_EOL;
