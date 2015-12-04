@@ -47,9 +47,7 @@ if(!$error){
       continue;
     }
     
-    if($error){
-      exit();
-    }
+    $error = false;
     
     if(empty($vhost['DocumentRoot']) or empty($vhost['ServerName'])){
       echo('') . PHP_EOL . PHP_EOL;
