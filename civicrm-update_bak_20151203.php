@@ -316,7 +316,7 @@ if(!$error){
 }*/
 
 // empty front page
-if(!$error){
+/*if(!$error){
   echo('') . PHP_EOL;
   message('Leeg standaardvoorpagina !');
   message(sprintf('Huidige standaardvoorpagina is: %s !', $drupal->getSiteFrontPage()));
@@ -326,7 +326,7 @@ if(!$error){
   }else {
     message('Standaardvoorpagina geleegd !', 'success');
   }
-}
+}*/
 
 // disable all civicrm modules except civicrm it self
 if(!$error){
@@ -336,7 +336,7 @@ if(!$error){
 
 $modules = [];
 
-if(!$error){
+/*if(!$error){
   echo('') . PHP_EOL;
   message('Haal alle modules op !');
   if(false === $modules = $drush->modules_themes(true, true, true)){
@@ -384,10 +384,10 @@ if(!$error){
       message('Updaten van civicrm via drush met cmd !', 'success');
     }
   }
-}
+}*/
 
 // set rights
-if(!$error){
+/*if(!$error){
   echo('') . PHP_EOL;
   message('Zet de gebruiker en groep van de bestanden goed !');
   if(!$linux->chown($vhost['DocumentRoot'], $params['chown'])){
@@ -406,7 +406,7 @@ if(!$error){
   }else {
     message('Het zetten van de rechten van de bestanden !', 'success');
   }
-}
+}*/
 
 // set site online
 echo('') . PHP_EOL;
@@ -424,7 +424,7 @@ if(false === $output = $drush->offline(0)){
 }
 
 // enable all civicrm modules
-echo('') . PHP_EOL;
+/*echo('') . PHP_EOL;
 message('Zet civicrm modules aan !');
 foreach($modules as $module){
   if('CiviCRM' == $module['Package'] and 'civicrm' != $module['Module']){
@@ -447,7 +447,7 @@ if(!$drupal->changeSiteFrontpageTemporary($drupal->getSiteFrontPage())){
   $error = true;
 }else {
   message(sprintf('Standaardvoorpagina terug gezet naar: %s !', $drupal->getSiteFrontPage()), 'success');
-}
+}*/
 
 // clear cache
 if(!$error){

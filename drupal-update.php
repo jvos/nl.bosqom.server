@@ -84,7 +84,7 @@ if(!$error){
     include_once 'inc/drupal-init.inc';
     
     // set site offline
-    include_once 'inc/drush-offline.inc';
+    //include_once 'inc/drush-offline.inc';
     
     // create a mysqldump of drupal database
     //include_once 'inc/drupal-mysqldump.inc';

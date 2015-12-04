@@ -134,7 +134,7 @@ if(!$error){
       $error = true;
     }
 
-    if(!$error){
+    /*if(!$error){
       echo('') . PHP_EOL;
       message('Zet de site in offline modus !');
       if(false === $output = $drush->offline(1)){
@@ -148,7 +148,7 @@ if(!$error){
           message('Site is in offline modus gezet !', 'success');
         }
       }
-    }
+    }*/
 
     if(!$error){
       echo('') . PHP_EOL; 

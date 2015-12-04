@@ -47,7 +47,7 @@ if(!$error){
       continue;
     }
     
-    if(!$error){
+    if($error){
       exit();
     }
     
