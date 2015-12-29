@@ -25,6 +25,8 @@ class civicrm {
   
   private $civicrm_domain = '';
   
+  private $custom_template_dir = '';
+  
   public function __construct($document_root, $server_name, $backup_dir) {
     if(empty($document_root)){
       throw new Exception(civicrm::message('Class civicrm, function __construct, $document_root is leeg !', 'error'));
@@ -63,7 +65,9 @@ class civicrm {
       $CIVICRM_MEMCACHE_TIMEOUT = '';
       $CIVICRM_MEMCACHE_PREFIX = '';
       
-      $TEST = '';
+      $CIVICRM_IDS_ENABLE = '';
+      
+      $CIVICRM_TEMPLATE_COMPILEDIR = '';
       
       ob_start();
       include $this->document_root . '/sites/default/civicrm.settings.php';
@@ -95,12 +99,19 @@ class civicrm {
       }else {
         $CIVICRM_MEMCACHE_PREFIX = '';
       }
-      if(defined('TEST')){
-        $TEST = constant("TEST");
+      
+      if(defined('CIVICRM_IDS_ENABLE')){
+        $CIVICRM_IDS_ENABLE = constant("CIVICRM_IDS_ENABLE");
       }else {
-        $TEST = '';
+        $CIVICRM_IDS_ENABLE = '';
       }
       
+      if(defined('CIVICRM_TEMPLATE_COMPILEDIR')){
+        $CIVICRM_TEMPLATE_COMPILEDIR = constant("CIVICRM_TEMPLATE_COMPILEDIR");
+      }else {
+        $CIVICRM_TEMPLATE_COMPILEDIR = '';
+      }
+            
       $content = ob_get_contents();
       ob_end_clean();
             
@@ -113,8 +124,10 @@ class civicrm {
       $this->settings['CIVICRM_MEMCACHE_TIMEOUT'] = $CIVICRM_MEMCACHE_TIMEOUT;
       $this->settings['CIVICRM_MEMCACHE_PREFIX'] = $CIVICRM_MEMCACHE_PREFIX;
       
-      $this->settings['TEST'] = $TEST;
+      $this->settings['CIVICRM_IDS_ENABLE'] = $CIVICRM_IDS_ENABLE;
       
+      $this->settings['CIVICRM_TEMPLATE_COMPILEDIR'] = $CIVICRM_TEMPLATE_COMPILEDIR;
+            
       list($this->username, $this->password, $this->host, $this->database) = sscanf($CIVICRM_DSN, "mysql://%[^:@?/]:%[^:@?/]@%[^:@?/]/%[^:@?/]?new_link=true");
             
       $this->databases['database'] = $this->database;
@@ -182,7 +195,17 @@ class civicrm {
       
       $row = $mysql->mysql_fetch_assoc_one($query);
       
-      $config_backend = unserialize($row['config_backend']);
+      
+      $config_backend = preg_replace('!s:(\d+):"(.*?)";!e', "'s:'.strlen('$2').':\"$2\";'", $row['config_backend']);
+      echo('$row[config_backend]: ' . $config_backend) . PHP_EOL;
+      
+      $config_backend = unserialize($config_backend);
+      
+      
+      echo('$config_backend: <pre>');
+      print_r($config_backend);
+      echo('</pre>');
+      
       $this->civicrm_domain = $config_backend;
       
       if(empty($row['config_backend'])){
@@ -193,6 +216,27 @@ class civicrm {
     }else {
       return false;
     }
-    return true;
+    return $this->civicrm_domain;
   }
+  
+  /*public function getCustomTemplateDir(){
+    $mysql = new mysql();
+    if($mysql->mysql_connect($this->host, $this->username, $this->password, $this->database)){
+      $query = "SELECT * FROM " . $this->prefix . "civicrm_setting WHERE name = 'customTemplateDir'";
+      
+      $row = $mysql->mysql_fetch_assoc_one($query);
+      $custom_template_dir = unserialize($row['value']);
+      
+      $this->custom_template_dir = $custom_template_dir;
+      
+      if(empty($row['value'])){
+        return false;
+      }else {
+        
+      }
+    }else {
+      return false;
+    }
+    return $this->custom_template_dir;
+  }*/
 }

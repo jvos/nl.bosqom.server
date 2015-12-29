@@ -159,6 +159,9 @@ if(!input_continue()){
   include 'continue.inc';
 }
 
+// check civicrm.settings.php
+include 'view/civicrm-clear-templates.inc';
+
 // drush execute
 /*if(!$error){
   echo('') . PHP_EOL;
@@ -180,13 +183,13 @@ if(!input_continue()){
 //include 'view/drupal-frontpage-restore.inc';
 
 // setrights
-include 'view/linux-chown.inc';
-include 'view/linux-chmod.inc';
+//include 'view/linux-chown.inc';
+//include 'view/linux-chmod.inc';
 
 // clear cache all
 include 'view/drush-cc-all.inc';
 
-message('Website weer online zetten !', 'warning');
+message('Website weer online zetten ??', 'warning');
 if(!input_continue()){
   include 'continue.inc';
 }

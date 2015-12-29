@@ -10,7 +10,7 @@ class php {
   
   public function __construct($linux) {
     if(empty($linux)){
-      throw new Exception('[ERROR] Class linux, function run, $linux is leeg !');
+      throw new Exception(php::message('Class linux, function run, $linux is leeg !', 'error'));
     }
     
     $this->linux = $linux;
@@ -23,6 +23,10 @@ class php {
   
   public function __destruct() {
     
+  }
+  
+  public static function message($message, $status = 'info'){
+    message($message, $status);
   }
   
   private function setmypid(){
@@ -64,5 +68,31 @@ class php {
     }
     
     return false;
+  }
+  
+  public function readdir($path){
+    $dirs = [];
+    if ($handle = opendir($path)) {
+      while (false !== ($entry = readdir($handle))) {
+        if ($entry != "." && $entry != "..") {
+          $dirs[] = $path . $entry;
+        }
+      }
+      closedir($handle);
+      
+    }else {
+      throw new Exception(php::message(sprintf('Kan map (%s) niet openen !', $path), 'error'));
+    }
+    return $dirs;
+  }
+  
+  public function rmdir($paths){
+    foreach($paths as $path){
+      if(false == rmdir($path)){
+        throw new Exception(php::message(sprintf('Kan map (%s) niet verwijderen !', $path), 'error'));
+      }
+    }
+    
+    return true;
   }
 }

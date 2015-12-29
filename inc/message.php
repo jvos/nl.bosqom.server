@@ -75,29 +75,38 @@ function message_save($message, $status = 'info'){
 function message_table($data, $headers){  
   // set lenght
   $lengths = [];
+  $i = 0;
   foreach ($headers as $header){
-    $lengths[$header] = strlen($header);
+    $lengths[$i] = strlen($header);
+    $i++;
   }
   
-  foreach ($data as $rows){
-    foreach($lengths as $header => $length){
-      if($length <= strlen($rows[$header])){
-        $lengths[$header] = strlen($rows[$header]);
+  foreach ($data as $rows => $row){
+    $i = 0;
+    foreach($row as $name => $value){
+      if($lengths[$i] <= strlen($value)){
+        $lengths[$i] = strlen($value);
       }
+      $i++;
     }
   }
   
   $table = [];
   // add with spaces after by highest text lenght
   foreach ($data as $rows => $row){
-    foreach($lengths as $header => $length){
-      $table[$rows][$header] = $row[$header] . str_repeat(' ', ($length-strlen($row[$header]))) . '  ';
+    $i = 0;
+    $table[$rows] = [];
+    foreach($row as $name => $value){
+      $table[$rows][$i] = $value . str_repeat(' ', ($lengths[$i]-strlen($value))) . '  ';
+      $i++;
     }
   }
   
   $ths = [];
-  foreach ($lengths as $header => $length){
-    $ths[] = $header . str_repeat(' ', ($length-strlen($header))) . '  ';
+  $i = 0;
+  foreach ($headers as $header){
+    $ths[$i] = $header . str_repeat(' ', ($lengths[$i]-strlen($header))) . '  ';
+    $i++;
   }
   
   message(implode('  ', $ths));

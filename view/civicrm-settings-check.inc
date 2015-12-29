@@ -22,7 +22,12 @@ if(!$error){
   if(!isset($civirm_settings['CIVICRM_MEMCACHE_PREFIX'])){
     message('CIVICRM_MEMCACHE_PREFIX bestaat niet of is leeg !', 'warning');
   }
+    
+  $data = [];
+  foreach($civirm_settings as $name => $value){
+    $data[] = [$name, $value];
+  }
   
-  echo('$civirm_settings[CIVICRM_MEMCACHE_PREFIX]: ' . $civirm_settings['CIVICRM_MEMCACHE_PREFIX']) . PHP_EOL;
+  message_table($data, ['Naam', 'Waarde']);
 }
 
