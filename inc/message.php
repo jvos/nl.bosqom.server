@@ -1,11 +1,5 @@
 <?php
-include_once 'date.php';
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 function message_color($message, $status = 'info'){
   switch($status){
     case 'error':
@@ -76,4 +70,41 @@ function message_save($message, $status = 'info'){
   }
 
   fclose($handle);
+}
+
+function message_table($data, $headers){  
+  // set lenght
+  $lengths = [];
+  foreach ($headers as $header){
+    $lengths[$header] = strlen($header);
+  }
+  
+  foreach ($data as $rows){
+    foreach($lengths as $header => $length){
+      if($length <= strlen($rows[$header])){
+        $lengths[$header] = strlen($rows[$header]);
+      }
+    }
+  }
+  
+  $table = [];
+  // add with spaces after by highest text lenght
+  foreach ($data as $rows => $row){
+    foreach($lengths as $header => $length){
+      $table[$rows][$header] = $row[$header] . str_repeat(' ', ($length-strlen($row[$header]))) . '  ';
+    }
+  }
+  
+  $ths = [];
+  foreach ($lengths as $header => $length){
+    $ths[] = $header . str_repeat(' ', ($length-strlen($header))) . '  ';
+  }
+  
+  message(implode('  ', $ths));
+  
+  foreach ($table as $tds => $td){
+    message(implode('  ', $td));
+  }
+  
+  return $table;
 }

@@ -1,10 +1,5 @@
 <?php
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 include_once 'mysql.php';
 include_once 'cron.php';
 
@@ -31,10 +26,10 @@ class drupal {
 
   public function __construct($document_root, $server_name) {
     if(empty($document_root)){
-      throw new Exception('[ERROR] Class drupal, function __construct, $document_root is leeg !');
+      throw new Exception(civicrm::message('Class drupal, function __construct, $document_root is leeg !', 'error'));
     }
     if(empty($server_name)){
-      throw new Exception('[ERROR] Class drupal, function __construct, $server_name is leeg !');
+      throw new Exception(civicrm::message('Class drupal, function __construct, $server_name is leeg !', 'error'));
     }
     
     $this->document_root = $document_root;
@@ -47,6 +42,10 @@ class drupal {
   
   public function __destruct() {
     
+  }
+  
+  public static function message($message, $status = 'info'){
+    message($message, $status);
   }
   
   private function setSettings(){
@@ -186,7 +185,49 @@ class drupal {
     }
   }
     
-  public function message($message, $status = 'info'){
-    message($message, $status);
+  public function getUsersLastLogin(){
+    $mysql = new mysql();
+    $timestamp = mktime();
+    
+    if($mysql->mysql_connect($this->host, $this->username, $this->password, $this->database)){
+      $query = "SELECT name, status, created, access FROM " . $this->prefix . "users ORDER BY access DESC LIMIT 10";
+      
+      $rows = $mysql->mysql_fetch_assoc($query);
+      foreach ($rows as $key => $row){
+        $rows[$key]['created'] = date('d-m-Y H:i:s', $row['created']);
+        $rows[$key]['access'] = date('d-m-Y H:i:s', $row['access']);
+        $rows[$key]['minutest a go'] = ($timestamp - $row['access']) / 60;
+      }
+      return $rows;
+            
+    }else {
+      return false;
+    }
+  }
+  
+  public function getUsers($fields = ['*'], $wheres = [], $groupbys = [], $orderbys = []){
+    $mysql = new mysql();
+    if($mysql->mysql_connect($this->host, $this->username, $this->password, $this->database)){
+      $query = "SELECT " . implode(', ', $fields) . " FROM " . $this->prefix . "users ";
+      /*if(!empty($wheres)){
+        $query .= "WHERE ";
+      }
+      foreach ($wheres as $field => ){
+        $query .=
+      }*/
+      
+      
+      
+      /*SET value = '" . serialize($site_frontpage) . "' WHERE name = 'site_frontpage'";
+      
+      if($result = $mysql->mysql_query($query)){
+        return true;
+      }
+      return false;
+      
+    }else {
+      return false;
+    }*/
+    }
   }
 }

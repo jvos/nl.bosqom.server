@@ -18,10 +18,10 @@ class drush {
     
   public function __construct($exec, $document_root, $path = '/usr/bin') {
     if(empty($exec)){
-      throw new Exception('[ERROR] Class drush, function __construct, $exec is leeg !');
+      throw new Exception(drush::message('Class drush, function __construct, $exec is leeg !', 'error'));
     }
     if(empty($document_root)){
-      throw new Exception('[ERROR] Class drush, function __construct, $document_root is leeg !');
+      throw new Exception(drush::message('Class drush, function __construct, $document_root is leeg !', 'error'));
     }
     
     $this->exec = $exec;
@@ -125,7 +125,7 @@ class drush {
     
     return $list;
   }
-  
+    
   public function enable_module($module){
     $command = sprintf("%s/%s %s -y", $this->path, 'drush pm-enable', $module);
     return $this->exec([$command, false]);  

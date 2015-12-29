@@ -23,15 +23,17 @@ class civicrm {
   private $driver = '';
   private $prefix = '';
   
+  private $civicrm_domain = '';
+  
   public function __construct($document_root, $server_name, $backup_dir) {
     if(empty($document_root)){
-      throw new Exception(civicrm::message('[ERROR] Class civicrm, function __construct, $document_root is leeg !', 'error'));
+      throw new Exception(civicrm::message('Class civicrm, function __construct, $document_root is leeg !', 'error'));
     }
     if(empty($server_name)){
-      throw new Exception(civicrm::message('[ERROR] Class civicrm, function __construct, $server_name is leeg !', 'error'));
+      throw new Exception(civicrm::message('Class civicrm, function __construct, $server_name is leeg !', 'error'));
     }
     if(empty($backup_dir)){
-      throw new Exception(civicrm::message('[ERROR] Class civicrm, function __construct, $backup_dir is leeg !', 'error'));
+      throw new Exception(civicrm::message('Class civicrm, function __construct, $backup_dir is leeg !', 'error'));
     }
     
     $this->document_root = $document_root;
@@ -55,16 +57,63 @@ class civicrm {
       $CIVICRM_UF_DSN = '';
       $CIVICRM_DSN = '';
       
+      $CIVICRM_USE_MEMCACHE = '';
+      $CIVICRM_MEMCACHE_HOST = '';
+      $CIVICRM_MEMCACHE_PORT = '';
+      $CIVICRM_MEMCACHE_TIMEOUT = '';
+      $CIVICRM_MEMCACHE_PREFIX = '';
+      
+      $TEST = '';
+      
       ob_start();
       include $this->document_root . '/sites/default/civicrm.settings.php';
       $CIVICRM_UF_DSN = constant("CIVICRM_UF_DSN");
       $CIVICRM_DSN = constant("CIVICRM_DSN");
+      
+      if(defined('CIVICRM_USE_MEMCACHE')){
+        $CIVICRM_USE_MEMCACHE = constant("CIVICRM_USE_MEMCACHE");
+      }else {
+        $CIVICRM_USE_MEMCACHE = '';
+      }
+      if(defined('CIVICRM_MEMCACHE_HOST')){
+        $CIVICRM_MEMCACHE_HOST = constant("CIVICRM_MEMCACHE_HOST");
+      }else {
+        $CIVICRM_MEMCACHE_HOST = '';
+      }  
+      if(defined('CIVICRM_MEMCACHE_PORT')){
+      $CIVICRM_MEMCACHE_PORT = constant("CIVICRM_MEMCACHE_PORT");
+      }else {
+        $CIVICRM_MEMCACHE_PORT = '';
+      }
+      if(defined('CIVICRM_MEMCACHE_TIMEOUT')){
+        $CIVICRM_MEMCACHE_TIMEOUT = constant("CIVICRM_MEMCACHE_TIMEOUT");
+      }else {
+        $CIVICRM_MEMCACHE_TIMEOUT = '';
+      }
+      if(defined('CIVICRM_MEMCACHE_PREFIX')){
+        $CIVICRM_MEMCACHE_PREFIX = constant("CIVICRM_MEMCACHE_PREFIX");
+      }else {
+        $CIVICRM_MEMCACHE_PREFIX = '';
+      }
+      if(defined('TEST')){
+        $TEST = constant("TEST");
+      }else {
+        $TEST = '';
+      }
+      
       $content = ob_get_contents();
       ob_end_clean();
-      
-      
+            
       $this->settings['CIVICRM_UF_DSN'] = $CIVICRM_UF_DSN;
       $this->settings['CIVICRM_DSN'] = $CIVICRM_DSN;
+      
+      $this->settings['CIVICRM_USE_MEMCACHE'] = $CIVICRM_USE_MEMCACHE;
+      $this->settings['CIVICRM_MEMCACHE_HOST'] = $CIVICRM_MEMCACHE_HOST;
+      $this->settings['CIVICRM_MEMCACHE_PORT'] = $CIVICRM_MEMCACHE_PORT;
+      $this->settings['CIVICRM_MEMCACHE_TIMEOUT'] = $CIVICRM_MEMCACHE_TIMEOUT;
+      $this->settings['CIVICRM_MEMCACHE_PREFIX'] = $CIVICRM_MEMCACHE_PREFIX;
+      
+      $this->settings['TEST'] = $TEST;
       
       list($this->username, $this->password, $this->host, $this->database) = sscanf($CIVICRM_DSN, "mysql://%[^:@?/]:%[^:@?/]@%[^:@?/]/%[^:@?/]?new_link=true");
             
@@ -123,6 +172,27 @@ class civicrm {
       return false;
     }
     
+    return true;
+  }
+  
+  public function getLocalizationSettings(){
+    $mysql = new mysql();
+    if($mysql->mysql_connect($this->host, $this->username, $this->password, $this->database)){
+      $query = "SELECT * FROM " . $this->prefix . "civicrm_domain WHERE id = '1'";
+      
+      $row = $mysql->mysql_fetch_assoc_one($query);
+      
+      $config_backend = unserialize($row['config_backend']);
+      $this->civicrm_domain = $config_backend;
+      
+      if(empty($row['config_backend'])){
+        return false;
+      }else {
+        
+      }
+    }else {
+      return false;
+    }
     return true;
   }
 }

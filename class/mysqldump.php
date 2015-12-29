@@ -19,22 +19,22 @@ class mysqldump {
 
   public function __construct($exec, $host, $user, $password, $database, $file) {
     if(empty($exec)){
-      throw new Exception('[ERROR] Class mysqldump, function __construct, $exec is leeg !');
+      throw new Exception(exec::message('Class mysqldump, function __construct, $exec is leeg !', 'error'));
     }
     if(empty($host)){
-      throw new Exception('[ERROR] Class mysqldump, function __construct, $host is leeg !');
+      throw new Exception(exec::message('Class mysqldump, function __construct, $host is leeg !', 'error'));
     }
     if(empty($user)){
-      throw new Exception('[ERROR] Class mysqldump, function __construct, $user is leeg !');
+      throw new Exception(exec::message('Class mysqldump, function __construct, $user is leeg !', 'error'));
     }
     if(empty($password)){
-      throw new Exception('[ERROR] Class mysqldump, function __construct, $password is leeg !');
+      throw new Exception(exec::message('Class mysqldump, function __construct, $password is leeg !', 'error'));
     }
     if(empty($database)){
-      throw new Exception('[ERROR] Class mysqldump, function __construct, $database is leeg !');
+      throw new Exception(exec::message('Class mysqldump, function __construct, $database is leeg !', 'error'));
     }
     if(empty($file)){
-      throw new Exception('[ERROR] Class mysqldump, function __construct, $file is leeg !');
+      throw new Exception(exec::message('Class mysqldump, function __construct, $file is leeg !', 'error'));
     }
         
     $this->exec = $exec;

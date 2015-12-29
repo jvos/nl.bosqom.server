@@ -38,6 +38,9 @@ class mysql {
   
   public function mysql_query($query){
     $result = mysql_query($query, $this->link);
+    if(!$result) {
+      throw new Exception(mysql::message(sprintf('Class mysql, function mysql_query, mysql_query mislukt ! Met error %s', mysql_error()), 'error'));
+    }
     return $result;
   }
   

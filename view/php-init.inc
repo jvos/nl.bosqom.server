@@ -1,5 +1,5 @@
 <?php
-include_once 'class/php.php';
+include 'class/php.php';
 include_once 'inc/message.php';
 
 if(!$error){

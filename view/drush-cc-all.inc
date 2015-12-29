@@ -1,4 +1,5 @@
 <?php
+
 if(!$error){
   echo('') . PHP_EOL;
   message('Clear all cache !');

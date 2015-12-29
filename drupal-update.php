@@ -1,20 +1,23 @@
 <?php
-exit();
-
+include_once 'inc/config.php';
 include_once 'inc/message.php';
+include_once 'inc/input.php';
+include_once 'inc/parameters.php';
 
 $params = array();
 $params['user'] = '--user, is de sudo gebruikersnaam, b.v. root.';
 $params['pass'] = '--pass, is de sudo wachtwoord van de gebruiker.';
 $params['server_name'] = '--server_name, welke website met servernaam er geupdate moet worden, kan ook \'all\' zijn voor alle websites, b.v. bosqom.nl.';
+$params['drush-bin'] = '--drush-bin, waar drush staat op de server (standaard staat op /usr/bin).';
 $params['cmd'] = '--cmd, welke drush opdracht er uitgevoerd moet word, b.v. drush up.';
 $params['backup-dir'] = '--backup_dir, waar de backup bestanden moeten komen (standaard staat op /var/tmp).';
 $params['chown'] = '--chown, is de gebruiker en de groep die de rechten krijgt van de bestanden, b.v. www-data:www-data (standaard op www-data:www-data).';
 $params['chmod'] = '--chmod, is de rechten die de bestanden krijgen, b.v. 755 (standaard op 770).';
 
-include_once 'inc/parameters.php';
+$params = parameters_check($params);
+$params = array_merge($params, input_sudo($params));
 
-echo('') . PHP_EOL . PHP_EOL;
+echo('') . PHP_EOL;
 
 if(!isset($params['user']) or empty($params['user'])){
   message('Geen gebruikersnaam van de sudo user (--user) !', 'error');
@@ -33,6 +36,11 @@ if(!isset($params['server_name']) or empty($params['server_name'])){
   message('De server_name moet zoiets zijn als www.bosqom.nl.', 'warning');
   message('Of als je alle websites wilt updaten gebruik dan all.', 'warning');
   return false;
+}
+
+if(!isset($params['drush-bin']) or empty($params['drush-bin'])){
+  message('Geef het path op van drush (--drush-bin) !', 'warning');
+  $params['drush-bin'] = '/usr/bin';
 }
 
 if(!isset($params['cmd']) or empty($params['cmd'])){
@@ -57,49 +65,54 @@ if(!isset($params['chmod']) or empty($params['chmod'])){
   $params['chmod'] = '770';
 }
 
-include_once 'inc/date.inc';
+echo('') . PHP_EOL;
+parameters_display($params);
+
+echo('') . PHP_EOL . PHP_EOL;
 
 $error = false;
+$input = 'continue';
 
-include_once 'inc/apache2-init.inc';
-include_once 'inc/exec-init.inc';
-include_once 'inc/linux-init.inc';
-include_once 'inc/php-init.inc';
+include_once 'view/apache2-init.inc';
+include_once 'view/exec-init.inc';
+include_once 'view/linux-init.inc';
+include_once 'view/php-init.inc';
 
-include_once 'inc/php-isRunning.inc';
+include_once 'view/php-isRunning.inc';
 
-if(!$error){
+if(!$error){  
   foreach($vhosts as $vhost){
-
+    $error = false;
+    
     if('all' == $params['server_name']){
 
     }elseif(!isset($vhost['ServerName']) or $vhost['ServerName'] != $params['server_name']) {
       continue;
     }
-
-    echo('') . PHP_EOL . PHP_EOL;
-    message('Start met ' . $vhost['ServerName']);
     
-    include_once 'inc/drush-init.inc';
-    include_once 'inc/drupal-init.inc';
+    // if vhost does not exist, show start with server_name 
+    include 'view/apache2-vhost.inc';
+    
+    include 'view/drush-init.inc';
+    include 'view/drupal-init.inc';
     
     // set site offline
-    //include_once 'inc/drush-offline.inc';
+    include 'view/drush-offline.inc';
     
     // create a mysqldump of drupal database
-    //include_once 'inc/drupal-mysqldump.inc';
+    include 'view/drupal-mysqldump.inc';
     
     // create a backup of all the files 
-    //include_once 'inc/linux-cp.inc';
+    include 'view/linux-cp.inc';
     
     // run drupal cron
-    include_once 'inc/drupal-cron.inc';
+    include 'view/drupal-cron.inc';
     
     // refresh drupal
-    include_once 'inc/drush-refresh.inc';
+    include 'view/drush-refresh.inc';
     
     // drush execute
-    /*if(!$error){
+    if(!$error){
       echo('') . PHP_EOL;
       message('Drupal updaten via drush met cmd !');
       if(false === $output = $drush->execute($params['cmd'] . ' --backupdir="' . $params['backup-dir'] . '"')){
@@ -113,16 +126,19 @@ if(!$error){
           message('Updaten van drupal via drush met cmd !', 'success');
         }
       }
-    }*/
+    }
     
     // setrights
-    //include_once 'inc/linux-chown.inc';
-    //include_once 'inc/linux-chmod.inc';
+    include 'view/linux-chown.inc';
+    include 'view/linux-chmod.inc';
     
     // set site online
-    include_once 'inc/drush-online.inc';
+    include 'view/drush-online.inc';
     
     // clear cache all
-    include_once 'inc/drush-cc-all.inc';
+    include 'view/drush-cc-all.inc';
   }
 }
+
+message('Klaar met het uitvoeren van het script !', 'success');
+exit(0);

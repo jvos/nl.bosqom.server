@@ -1,5 +1,6 @@
 <?php
 include_once 'class/linux.php';
+include_once 'inc/message.php';
 
 if(!$error){
   echo('') . PHP_EOL;

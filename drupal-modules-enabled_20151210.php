@@ -1,8 +1,5 @@
 <?php
-include_once 'inc/config.php';
 include_once 'inc/message.php';
-include_once 'inc/input.php';
-include_once 'inc/parameters.php';
 
 $params = array();
 $params['user'] = '--user, is de sudo gebruikersnaam, b.v. root.';
@@ -10,10 +7,9 @@ $params['pass'] = '--pass, is de sudo wachtwoord van de gebruiker.';
 $params['drush-bin'] = '--drush-bin, waar drush staat op de server (standaard staat op /usr/bin).';
 $params['server_name'] = '--server_name, welke website met servernaam er geupdate moet worden, kan ook \'all\' zijn voor alle websites, b.v. bosqom.nl.';
 
-$params = parameters_check($params);
-$params = array_merge($params, input_sudo($params));
+include_once 'inc/parameters.php';
 
-echo('') . PHP_EOL;
+echo('') . PHP_EOL . PHP_EOL;
 
 if(!isset($params['user']) or empty($params['user'])){
   message('Geef gebruikersnaam van de sudo user (--user) !', 'error');
@@ -39,41 +35,39 @@ if(!isset($params['server_name']) or empty($params['server_name'])){
   return false;
 }
 
-echo('') . PHP_EOL;
-parameters_display($params);
-
-echo('') . PHP_EOL . PHP_EOL;
-
 $error = false;
-$input = 'continue';
 
-include_once 'view/apache2-init.inc';
-include_once 'view/exec-init.inc';
-include_once 'view/linux-init.inc';
-include_once 'view/php-init.inc';
+include_once 'inc/apache2-init.inc';
+include_once 'inc/exec-init.inc';
+include_once 'inc/linux-init.inc';
+include_once 'inc/php-init.inc';
 
-include_once 'view/php-isRunning.inc';
+include_once 'inc/php-isRunning.inc';
 
-if(!$error){  
+if(!$error){
   foreach($vhosts as $name => $vhost){
-    $error = false;
-    
+
     if('all' == $params['server_name']){
 
     }elseif(!isset($vhost['ServerName']) or $vhost['ServerName'] != $params['server_name']) {
       continue;
     }
     
-    // if vhost does not exist, show start with server_name 
-    include 'view/apache2-vhost.inc';
+    $error = false;
+    
+    if(empty($vhost['DocumentRoot']) or empty($vhost['ServerName'])){
+      echo('') . PHP_EOL . PHP_EOL;
+      message(sprintf('De vhost met bestand naam %s, is overgeslagen, omdat hij geen document root of server name heeft !', $name));
+      continue;
+    }
+
+    message('') . PHP_EOL . PHP_EOL;
+    message('Start met ' . $vhost['ServerName']);
         
-    include 'view/drush-init.inc';
-    include 'view/drupal-init.inc';
+    include 'inc/drush-init.inc';
+    include 'inc/drupal-init.inc';
     
     // get drupal modules enabled
-    include 'view/drush-modules-enabled.inc';
+    include 'inc/drush-modules_enabled.inc';
   }
 }
-
-message('Klaar met het uitvoeren van het script !', 'success');
-exit(0);

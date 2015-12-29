@@ -1,12 +1,5 @@
 <?php
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-include_once 'linux.php';
-
 class php {
   private $linux;
   
@@ -46,8 +39,6 @@ class php {
     }else {
       $this->filename = substr($this->server['SCRIPT_FILENAME'], strrpos($this->server['SCRIPT_FILENAME'], '/')+1);
     }
-    
-    echo('$this->filename: ' . $this->filename) . PHP_EOL;
   }
   
   private function setFilePath(){
@@ -56,8 +47,6 @@ class php {
     }else {
       $this->filepath = substr($this->server['SCRIPT_FILENAME'], 0, strrpos($this->server['SCRIPT_FILENAME'], '/'));
     }
-    
-    echo('$this->filepath: ' . $this->filepath) . PHP_EOL;
   }
   
   public function isRunning(){    
