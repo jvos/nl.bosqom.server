@@ -131,6 +131,12 @@ class drush {
     return $list;
   }
     
+  public function modules_update_status(){
+    $command = sprintf("%s/%s", $this->path, 'drush pm-updatestatus');
+        
+    return $this->exec([$command, false]); 
+  }
+    
   public function enable_module($module){
     $command = sprintf("%s/%s %s -y", $this->path, 'drush pm-enable', $module);
     return $this->exec([$command, false]);  
@@ -139,6 +145,11 @@ class drush {
   public function disable_module($module){
     $command = sprintf("%s/%s %s -y", $this->path, 'drush pm-disable', $module);
     return $this->exec([$command, false]);  
+  }
+  
+  public function status_modules(){
+    $command = sprintf("%s/%s %s -y", $this->path, 'drush pm-disable', $module);
+    return $this->exec([$command, false]); 
   }
   
   public function get_site_frontpage(){
