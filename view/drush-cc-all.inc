@@ -1,4 +1,6 @@
 <?php
+include_once 'class/drush.php';
+include_once 'inc/message.php';
 
 if(!$error){
   echo('') . PHP_EOL;

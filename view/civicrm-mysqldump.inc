@@ -1,5 +1,5 @@
 <?php
-include 'class/mysqldump.php';
+include_once 'class/mysqldump.php';
 
 if(!$error){
   echo('') . PHP_EOL;
@@ -27,7 +27,7 @@ if(!$error){
   echo('') . PHP_EOL;
   message('Mysqldump initialiseren !');
   try {
-    $mysqldump_civicrm = new mysqldump($exec, $database_civicrm['host'], $database_civicrm['username'], $database_civicrm['password'], $database_civicrm['database'], $params['backup-dir'] . '/' . $database_civicrm['database'] . '_bak_' . $date . '.sql');
+    $mysqldump_civicrm = new mysqldump($exec, $database_civicrm['host'], $database_civicrm['username'], $database_civicrm['password'], $database_civicrm['database'], $params['backup-dir'] . '/' . $database_civicrm['database'] . '_bak_' . $datetime . '.sql');
   }catch (Exception $e) {
     message(sprintf('Bij initialiseren class mysqldump, catch: %s !', $e->getMessage()), 'error');
     $error = true;

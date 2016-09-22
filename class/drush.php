@@ -65,6 +65,11 @@ class drush {
     return $this->exec([$command, false]);
   }
   
+  public function clear_cache_views(){
+    $command = sprintf("%s/%s -y", $this->path, 'drush cache-clear views');
+    return $this->exec([$command, false]);
+  }
+  
   public function execute($cmd){
     if( false === strpos($cmd, 'drush')){
       drush::message('Class drush, function __construct, command is not a druhs command !', 'error');

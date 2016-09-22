@@ -19,13 +19,14 @@ function parameters_check($params){
   }
 
   foreach ($argv as $arg) {
-    if (ereg('--([^=]+)=(.*)',$arg,$reg)) {
-      $params[$reg[1]] = $reg[2];
-    } elseif(ereg('-([a-zA-Z0-9](+))',$arg,$reg)) {
-      $params[$reg[1]] = true;
+    //if (ereg('--([^=]+)=(.*)',$arg,$reg)) {
+    if (preg_match('/--([^=]+)=(.*)/', $arg, $matches)) {
+      $params[$matches[1]] = $matches[2];
+    //} elseif(ereg('-([a-zA-Z0-9](+))',$arg,$reg)) {
+    } elseif(preg_match('/--([^=]+)=(.*)/', $arg, $matches)) {
+      $params[$matches[1]] = true;
     }
   }
-  
   return $params;
 }
 

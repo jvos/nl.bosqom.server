@@ -1,4 +1,7 @@
 <?php
+include_once 'class/drupal.php';
+include_once 'inc/message.php';
+
 include_once 'class/mysqldump.php';
 
 if(!$error){
@@ -26,7 +29,7 @@ if(!$error){
   echo('') . PHP_EOL;
   message('Mysqldump initialiseren !');
   try {
-    $mysqldump = new mysqldump($exec, $database['host'], $database['username'], $database['password'], $database['database'], $params['backup-dir'] . '/' . $database['database'] . '_bak_' . $date . '.sql');
+    $mysqldump = new mysqldump($exec, $database['host'], $database['username'], $database['password'], $database['database'], $params['backup-dir'] . '/' . $database['database'] . '_bak_' . $datetime . '.sql');
   }catch (Exception $e) {
     message(sprintf('Bij initialiseren class mysqldump, catch: %s !', $e->getMessage()), 'error');
     $error = true;

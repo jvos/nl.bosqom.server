@@ -84,6 +84,13 @@ function message_table($data, $headers){
   foreach ($data as $rows => $row){
     $i = 0;
     foreach($row as $name => $value){
+      if(is_object($value)){
+        $value = (array) $value;
+      }
+      if(is_array($value)){
+        $value = message_array_to_string($value);
+      }
+      
       if($lengths[$i] <= strlen($value)){
         $lengths[$i] = strlen($value);
       }
@@ -97,6 +104,13 @@ function message_table($data, $headers){
     $i = 0;
     $table[$rows] = [];
     foreach($row as $name => $value){
+      if(is_object($value)){
+        $value = (array) $value;
+      }
+      if(is_array($value)){
+        $value = message_array_to_string($value);
+      }
+      
       $table[$rows][$i] = $value . str_repeat(' ', ($lengths[$i]-strlen($value))) . '  ';
       $i++;
     }
@@ -116,4 +130,19 @@ function message_table($data, $headers){
   }
   
   return $table;
+}
+
+function message_array_to_string($array){
+  $return = '';
+  if(is_array($array)){
+    foreach($array as $key => $value){
+      $return .= $key;
+      if(is_array($value)){
+        $return .= message_array_to_string($value);
+      }else {
+        $return .= ' => ' . $value . ', ';
+      }
+    }
+  }
+  return $return;
 }

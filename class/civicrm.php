@@ -196,22 +196,13 @@ class civicrm {
       $row = $mysql->mysql_fetch_assoc_one($query);
       
       
-      $config_backend = preg_replace('!s:(\d+):"(.*?)";!e', "'s:'.strlen('$2').':\"$2\";'", $row['config_backend']);
-      echo('$row[config_backend]: ' . $config_backend) . PHP_EOL;
-      
+      $config_backend = preg_replace('!s:(\d+):"(.*?)";!e', "'s:'.strlen('$2').':\"$2\";'", $row['config_backend']);      
       $config_backend = unserialize($config_backend);
-      
-      
-      echo('$config_backend: <pre>');
-      print_r($config_backend);
-      echo('</pre>');
-      
+            
       $this->civicrm_domain = $config_backend;
       
       if(empty($row['config_backend'])){
         return false;
-      }else {
-        
       }
     }else {
       return false;
@@ -239,4 +230,52 @@ class civicrm {
     }
     return $this->custom_template_dir;
   }*/
+  
+  public function getSettingsPath(){
+    $setting_path = [];
+    
+    $mysql = new mysql();
+    if($mysql->mysql_connect($this->host, $this->username, $this->password, $this->database)){
+      $query = "SELECT * FROM " . $this->prefix . "civicrm_setting WHERE name = 'uploadDir' OR name = 'imageUploadDir' OR name = 'customFileUploadDir' 
+        OR name = 'customTemplateDir' OR name = 'customPHPPathDir' OR name = 'extensionsDir'";
+      
+      $rows = $mysql->mysql_fetch_assoc($query);
+      foreach ($rows as $key => $row){        
+        $row['value'] = unserialize($row['value']);
+        
+        $setting_path[$row['name']] = $row['value'];
+      }
+      
+      if(empty($setting_path)){
+        return false;
+      }
+    }else {
+      return false;
+    }
+    return $setting_path;
+  }
+  
+  public function getSettingsUrl(){
+    $setting_url = [];
+    
+    $mysql = new mysql();
+    if($mysql->mysql_connect($this->host, $this->username, $this->password, $this->database)){
+      $query = "SELECT * FROM " . $this->prefix . "civicrm_setting WHERE name = 'userFrameworkResourceURL' OR name = 'imageUploadURL' OR name = 'customCSSURL' 
+        OR name = 'disable_core_css' OR name = 'extensionsURL' OR name = 'enableSSL' OR name = 'verifySSL' OR name = 'cvv_backoffice_required'";
+      
+      $rows = $mysql->mysql_fetch_assoc($query);
+      foreach ($rows as $key => $row){
+        $row['value'] = unserialize($row['value']);
+        
+        $setting_url[$row['name']] = $row['value'];
+      }
+      
+      if(empty($setting_url)){
+        return false;
+      }
+    }else {
+      return false;
+    }
+    return $setting_url;
+  }
 }

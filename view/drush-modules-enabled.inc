@@ -1,4 +1,7 @@
 <?php
+include_once 'class/drush.php';
+include_once 'inc/message.php';
+
 $modules_enabled = [];
 
 if(!$error){

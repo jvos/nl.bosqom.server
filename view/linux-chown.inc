@@ -1,6 +1,6 @@
 <?php
 
-if(!$error){
+//if(!$error){
   echo('') . PHP_EOL;
   message('Zet de gebruiker en groep van de bestanden goed !');
   if(false === $linux->chown($vhost['DocumentRoot'], $params['chown'])){
@@ -9,4 +9,4 @@ if(!$error){
   }else {
     message('Gebruikers en groep bestanden goed gezet !', 'success');
   }
-}
+//}

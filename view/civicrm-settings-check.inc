@@ -18,9 +18,12 @@ if(!$error){
   if(!isset($civirm_settings['CIVICRM_MEMCACHE_TIMEOUT']) or empty($civirm_settings['CIVICRM_MEMCACHE_TIMEOUT'])){
     message('CIVICRM_MEMCACHE_TIMEOUT bestaat niet of is leeg !', 'warning');
   }
-  
   if(!isset($civirm_settings['CIVICRM_MEMCACHE_PREFIX'])){
     message('CIVICRM_MEMCACHE_PREFIX bestaat niet of is leeg !', 'warning');
+  }
+  
+  if(!isset($civirm_settings['CIVICRM_IDS_ENABLE'])){
+    message('CIVICRM_IDS_ENABLE bestaat niet of is leeg !', 'warning');
   }
     
   $data = [];

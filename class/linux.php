@@ -72,6 +72,48 @@ class linux {
     return $this->exec->run([[$command, true]]);
   }
   
+  public function rm($path, $is_dir = false){
+    if(empty($path)){
+      linux::message('Class linux, function rm, $path is leeg !', 'error');
+      return false;
+    }
+    
+    if($is_dir){
+      $command = sprintf("rm -R %s", $path);
+    }else {
+      $command = sprintf("rm %s", $path);
+    }
+        
+    return $this->exec->run([[$command, true]]);
+  }
+  
+  public function find($path, $find, $mindepth = false, $maxdepth = false, $hidden = false){
+    if(empty($path)){
+      linux::message('Class linux, function find, $path is leeg !', 'error');
+      return false;
+    }
+    
+    if(empty($find)){
+      linux::message('Class linux, function find, $find is leeg !', 'error');
+      return false;
+    }
+    
+    $command = sprintf("find %s", $path);
+    if($mindepth){
+      $command .= sprintf(" -mindepth %s", $mindepth);
+    }
+    if($maxdepth){
+      $command .= sprintf(" -maxdepth %s", $maxdepth);
+    }
+    $command .= ' ' . $find;
+    
+    if($hidden){
+      $command .= ' \( ! -iname ".*" \)';
+    }
+    
+    return $this->exec->run([[$command, true]]);
+  }
+  
   public function ps_aux($grep = ''){
     $command = sprintf("ps aux");
     if(!empty($grep)){

@@ -7,7 +7,7 @@ if(!isset($input) or empty($input)){
 }
 
 if('continue' == $input){
-  continue;
+  $error = true;
 }else {
   exit(1);
 }

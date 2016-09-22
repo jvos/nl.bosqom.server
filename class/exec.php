@@ -56,10 +56,12 @@ class exec {
     $return_var = -1;
     
     exec($command, $output, $return_var);
-    exec::message(sprintf("Class exec, function run, De return van het command: %s", $return_var));
+    //exec::message(sprintf("Class exec, function run, De return van het command: %s", $return_var));
+    exec::message_save(sprintf("Class exec, function run, De return van het command: %s", $return_var));
     
-    exec::message('Class exec, function run, De ouput van het command: ');
-    echo(implode(PHP_EOL, $output)) . PHP_EOL;
+    //exec::message('Class exec, function run, De ouput van het command: ');
+    exec::message_save('Class exec, function run, De ouput van het command: ');
+    exec::message_save(implode(PHP_EOL, $output)) . PHP_EOL;
     
     if(empty($return_var)){
       return $output;

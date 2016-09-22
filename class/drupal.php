@@ -23,6 +23,9 @@ class drupal {
   private $cron_key = '';
   
   private $site_frontpage = '';
+  
+  private $theme = [];
+  private $theme_civicrm_module_status = false;
 
   public function __construct($document_root, $server_name) {
     if(empty($document_root)){
@@ -35,9 +38,11 @@ class drupal {
     $this->document_root = $document_root;
     $this->server_name = $server_name;
     
-    $this->setSettings();
-    $this->setCronKey();
-    $this->setSiteFrontPage();
+    if($this->setSettings()){
+      $this->setCronKey();
+      $this->setSiteFrontPage();
+      $this->setTheme();
+    }
   }
   
   public function __destruct() {
@@ -101,7 +106,10 @@ class drupal {
     }else {
       $this->message('Class drupal, function setSettings, Geen settings.php bestand !', 'error');
       $this->settings = false;
+      return false;
     }
+    
+    return true;
   }
   
   public function getSettings(){
@@ -152,7 +160,7 @@ class drupal {
     return cron::executeUrl($url);
   }
 
-  public function setSiteFrontPage(){        
+  private function setSiteFrontPage(){        
     $mysql = new mysql();
     if($mysql->mysql_connect($this->host, $this->username, $this->password, $this->database)){
       $query = "SELECT value FROM " . $this->prefix . "variable WHERE name = 'site_frontpage'";
@@ -161,6 +169,7 @@ class drupal {
       $value = unserialize($row['value']);
       
       $this->site_frontpage = $value;
+      return true;
     }else {
       return false;
     }
@@ -170,7 +179,7 @@ class drupal {
     return $this->site_frontpage;
   }
   
-  public function changeSiteFrontpageTemporary($site_frontpage){
+  public function changeSiteFrontPage($site_frontpage){    
     $mysql = new mysql();
     if($mysql->mysql_connect($this->host, $this->username, $this->password, $this->database)){
       $query = "UPDATE " . $this->prefix . "variable SET value = '" . serialize($site_frontpage) . "' WHERE name = 'site_frontpage'";
@@ -197,6 +206,7 @@ class drupal {
         $rows[$key]['created'] = date('d-m-Y H:i:s', $row['created']);
         $rows[$key]['access'] = date('d-m-Y H:i:s', $row['access']);
         $rows[$key]['minutest a go'] = ($timestamp - $row['access']) / 60;
+        $rows[$key]['hours a go'] = $rows[$key]['minutest a go'] / 60;
       }
       return $rows;
             
@@ -229,5 +239,62 @@ class drupal {
       return false;
     }*/
     }
+  }
+  
+  private function setTheme(){
+    $mysql = new mysql();
+    
+    // before we need to know if the civicrm theme modules is active
+    if($mysql->mysql_connect($this->host, $this->username, $this->password, $this->database)){
+      $query = "SELECT status FROM " . $this->prefix . "system WHERE name = 'civicrmtheme' LIMIT 1";
+      
+      $row = $mysql->mysql_fetch_assoc_one($query);
+      if($row['status'] == '1'){
+        $this->theme_civicrm_module_status = true;
+      }else {
+        $this->theme_civicrm_module_status = false;
+      }
+    }   
+    
+    if($mysql->mysql_connect($this->host, $this->username, $this->password, $this->database)){
+      $query = "SELECT * FROM " . $this->prefix . "variable WHERE name = 'admin_theme' OR name = 'civicrmtheme_theme_admin' OR name = 'civicrmtheme_theme_public'";
+      
+      $rows = $mysql->mysql_fetch_assoc($query);
+      foreach ($rows as $key => $row){
+        $this->theme[$row['name']] = unserialize($row['value']); 
+      }
+      
+      if(!isset($this->theme['admin_theme']) or empty($this->theme['admin_theme'])){
+        return false;
+      }
+      
+      if($this->theme_civicrm_module_status and (!isset($this->theme['civicrmtheme_theme_admin']) or empty($this->theme['civicrmtheme_theme_admin']))){
+        return false;
+      }
+      
+      if($this->theme_civicrm_module_status and (!isset($this->theme['civicrmtheme_theme_public']) or empty($this->theme['civicrmtheme_theme_public']))){
+        return false;
+      }
+      
+      return true;
+    }else {
+      return false;
+    }
+  }
+  
+  public function getTheme(){
+    if(!isset($this->theme['admin_theme']) or empty($this->theme['admin_theme'])){
+      return false;
+    }
+
+    if($this->theme_civicrm_module_status and (!isset($this->theme['civicrmtheme_theme_admin']) or empty($this->theme['civicrmtheme_theme_admin']))){
+      return false;
+    }
+
+    if($this->theme_civicrm_module_status and (!isset($this->theme['civicrmtheme_theme_public']) or empty($this->theme['civicrmtheme_theme_public']))){
+      return false;
+    }
+      
+    return $this->theme;
   }
 }
