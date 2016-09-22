@@ -46,7 +46,7 @@ class drush {
      * This will refresh the list of available updates so Drush knows there is a new release for Drupal
      */
     $command = sprintf("%s/%s", $this->path, 'drush rf');
-    return $this->exec([$command, true]);
+    return $this->exec([$command, false]);
   }
   
   public function offline($onoff = 0, $message = ''){
