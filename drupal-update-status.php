@@ -75,6 +75,12 @@ if(!$error){
     include 'view/drush-init.inc';
     include 'view/drupal-init.inc';
         
+    // run drupal cron
+    //include 'view/drupal-cron.inc';
+    
+    // refresh drupal
+    include 'view/drush-refresh.inc';
+    
     // get drupal modules enabled
     include 'view/drush-update-status.inc';
   }
