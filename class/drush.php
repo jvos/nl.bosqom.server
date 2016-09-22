@@ -146,7 +146,7 @@ class drush {
       $array = preg_split("/\s{2,}/", $string);      
       
       if(!empty($array) and !empty($array[0]) and !empty($array[1]) and !empty($array[2])){
-        if('Name' == $array[0] and 'Installed Version' == $array[1]){
+        if('Name' == $array[0]){
           $start = true;
         }        
         
