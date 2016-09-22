@@ -79,7 +79,7 @@ if(!$error){
     //include 'view/drupal-cron.inc';
     
     // refresh drupal
-    include 'view/drush-refresh.inc';
+    //include 'view/drush-refresh.inc';
     
     // get drupal modules enabled
     include 'view/drush-update-status.inc';
