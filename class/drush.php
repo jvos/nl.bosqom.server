@@ -136,6 +136,36 @@ class drush {
         
     return $this->exec([$command, false]); 
   }
+  
+  public function list_modules_update_status($output){
+    $list = [];
+    $start = false; // there will be a large list of all the drupal modules, i want only the last modules (the ones that need to be updated)
+    
+    foreach ($output as $key => $string){
+      $string = trim($string);
+      $array = preg_split("/\s{2,}/", $string);
+            
+      if(!empty($array) and !empty($array[0]) and !empty($array[1]) and !empty($array[2])){
+        if('Name' == $array[0]){
+          $start = true;
+        }        
+        
+        if($start){
+          $name = trim($array[0]);
+          $installed_version = trim($array[1]);
+          $proposed_version = trim($array[2]);
+          $message = trim($array[3]);
+
+          if(!empty($package) and !empty($naam) and !empty($versie) and !empty($module) and 'Package' != $package){
+            $list[] = ['Name' => $name, 'Installed Version' => $installed_version, 'Proposed version' => $proposed_version, 'Message' => $message];
+          }
+        }
+      }
+    }
+    
+    return $list;
+  }
+  
     
   public function enable_module($module){
     $command = sprintf("%s/%s %s -y", $this->path, 'drush pm-enable', $module);

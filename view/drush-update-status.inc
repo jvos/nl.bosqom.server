@@ -12,7 +12,7 @@ if(!$error){
     $error = true;
   }else {
     message('Alle statussen van modules opgehaald !', 'success');
-    $modules_update_status = $drush->list_modules_themes($modules_update_status);
+    $modules_update_status = $drush->list_modules_update_status($modules_update_status);
     message_table($modules_update_status, ['Name', 'Installed Version', 'Proposed version', 'Message']);
   }
 }
