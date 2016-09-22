@@ -130,7 +130,7 @@ if(!$error){
     if(!$error){
       echo('') . PHP_EOL;
       message('Drupal updaten via drush met cmd !');
-      if(false === $output = $drush->execute($params['cmd'] . ' --backupdir="' . $params['backup-dir'] . '"')){
+      if(false === $output = $drush->execute($params['cmd'] . ' --backup-dir="' . $params['backup-dir'] . '"')){
         message('Bij update van de drupal via drush met cmd !', 'error');
         $error = true;
       }else {      

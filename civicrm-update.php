@@ -203,7 +203,7 @@ include 'view/civicrm-clear-templates.inc';
 if(!$error){
   echo('') . PHP_EOL;
   message('Civicrm updaten via drush met cmd !');
-  if(false === $output = $drush->execute($params['cmd'] . ' --backupdir="' . $params['backup-dir'] . '" --tarfile="' . $params['backup-dir'] . '/' . sprintf('civicrm-%s-drupal.tar.gz', $params['version']) . '" --langtarfile="' . $params['backup-dir'] . '/' . sprintf('civicrm-%s-l10n.tar.gz', $params['version']) . '"')){
+  if(false === $output = $drush->execute($params['cmd'] . ' --backup-dir="' . $params['backup-dir'] . '" --tarfile="' . $params['backup-dir'] . '/' . sprintf('civicrm-%s-drupal.tar.gz', $params['version']) . '" --langtarfile="' . $params['backup-dir'] . '/' . sprintf('civicrm-%s-l10n.tar.gz', $params['version']) . '"')){
     message('Bij update van de civicrm via drush met cmd !', 'error');
     $error = true;
   }else {      
