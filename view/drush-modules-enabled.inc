@@ -12,7 +12,7 @@ if(!$error){
     $error = true;
   }else {
     message('Alle modules opgehaald !', 'success');
-    $modules_enabled = list_modules_themes($modules_enabled);
+    $modules_enabled = $drush->list_modules_themes($modules_enabled);
     message_table($modules_enabled, ['Package', 'Naam', 'Versie', 'Module']);
   }
 }
