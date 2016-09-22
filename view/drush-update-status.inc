@@ -2,7 +2,7 @@
 include_once 'class/drush.php';
 include_once 'inc/message.php';
 
-$modules_enabled = [];
+$modules_update_status = [];
 
 if(!$error){
   echo('') . PHP_EOL;

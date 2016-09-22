@@ -102,7 +102,7 @@ class drush {
     foreach ($output as $key => $string){
       $string = trim($string);
       $array = preg_split("/\s{2,}/", $string);
-      
+            
       if(!empty($array) and !empty($array[0]) and !empty($array[1]) and !empty($array[2])){
         
         $package = trim($array[0]);
@@ -143,10 +143,10 @@ class drush {
     
     foreach ($output as $key => $string){
       $string = trim($string);
-      $array = preg_split("/\s{2,}/", $string);
-            
+      $array = preg_split("/\s{2,}/", $string);      
+      
       if(!empty($array) and !empty($array[0]) and !empty($array[1]) and !empty($array[2])){
-        if('Name' == $array[0]){
+        if('Name' == $array[0] and 'Installed Version' == $array[1]){
           $start = true;
         }        
         
@@ -156,7 +156,7 @@ class drush {
           $proposed_version = trim($array[2]);
           $message = trim($array[3]);
 
-          if(!empty($package) and !empty($naam) and !empty($versie) and !empty($module) and 'Package' != $package){
+          if(!empty($name) and !empty($installed_version) and !empty($proposed_version) and !empty($message) and 'Name' != $name){
             $list[] = ['Name' => $name, 'Installed Version' => $installed_version, 'Proposed version' => $proposed_version, 'Message' => $message];
           }
         }
@@ -166,7 +166,6 @@ class drush {
     return $list;
   }
   
-    
   public function enable_module($module){
     $command = sprintf("%s/%s %s -y", $this->path, 'drush pm-enable', $module);
     return $this->exec([$command, false]);  

@@ -39,6 +39,10 @@ if(!isset($params['server_name']) or empty($params['server_name'])){
   return false;
 }
 
+if($error_params){
+  exit(1);
+}
+
 echo('') . PHP_EOL;
 parameters_display($params);
 
